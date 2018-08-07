@@ -8,7 +8,49 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Page.Resources>
+        <DataTemplate x:Name="SensorDataTemplate" x:DataType="local:SensorDataDisplay">
+            <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
+                               Margin="10"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" TextAlignment="Left">
+                                    💦 <Run Text="{x:Bind Moisture, Mode=OneWay}"/>%
+                        </TextBlock>
+                        <TextBlock Grid.Column="2" TextAlignment="Center">
+                                    ☀️ <Run Text="{x:Bind Brightness, Mode=OneWay}"/> lux
+                        </TextBlock>
+                        <TextBlock Grid.Column="1" TextAlignment="Center">
+                                    🐇 <Run Text="{x:Bind Fertility, Mode=OneWay}"/> µS/cm
+                        </TextBlock>
+                        <TextBlock Grid.Column="3" TextAlignment="Right">
+                                    🌡️ <Run Text="{x:Bind Temperature, Mode=OneWay}"/>°C
+                        </TextBlock>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0"
+                  BorderBrush="AntiqueWhite" BorderThickness="1">
 
-    </Grid>
+        <StackPanel BorderBrush="Red" BorderThickness="10">
+            <ListView  x:Name="SensorDataListView" 
+                   ItemsSource="{Binding Items}"
+                   d:DataContext="{d:DesignInstance Type=local:SampleData, IsDesignTimeCreatable=True}"
+                   ItemTemplate="{StaticResource SensorDataTemplate}"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>
