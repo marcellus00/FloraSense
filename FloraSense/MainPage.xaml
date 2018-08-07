@@ -5,52 +5,50 @@
     xmlns:local="using:FloraSense"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <Page.Resources>
-        <DataTemplate x:Name="SensorDataTemplate" x:DataType="local:SensorDataDisplay">
-            <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
-                               Margin="10"/>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <Grid Margin="0,0,0,5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition Width="1.5*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" TextAlignment="Left">
-                                    💦 <Run Text="{x:Bind Moisture, Mode=OneWay}"/>%
-                        </TextBlock>
-                        <TextBlock Grid.Column="2" TextAlignment="Center">
-                                    ☀️ <Run Text="{x:Bind Brightness, Mode=OneWay}"/> lux
-                        </TextBlock>
-                        <TextBlock Grid.Column="1" TextAlignment="Center">
-                                    🐇 <Run Text="{x:Bind Fertility, Mode=OneWay}"/> µS/cm
-                        </TextBlock>
-                        <TextBlock Grid.Column="3" TextAlignment="Right">
-                                    🌡️ <Run Text="{x:Bind Temperature, Mode=OneWay}"/>°C
-                        </TextBlock>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
     <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0"
                   BorderBrush="AntiqueWhite" BorderThickness="1">
 
-        <StackPanel BorderThickness="10">
-            <ListView  x:Name="SensorDataListView" 
-                   ItemsSource="{x:Bind KnownDevices}"
-                   d:DataContext="{d:DesignInstance Type=local:SampleSensorData, IsDesignTimeCreatable=True}"
-                   ItemTemplate="{StaticResource SensorDataTemplate}"/>
-        </StackPanel>
+        <ListView
+            ItemsSource="{Binding KnownDevices}"
+            d:DataContext="{StaticResource SampleData}">
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
+                               Margin="10"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" TextAlignment="Left">
+                                    💦 <Run Text="{Binding Moisture}"/>%
+                                </TextBlock>
+                                <TextBlock Grid.Column="2" TextAlignment="Center">
+                                    ☀️ <Run Text="{Binding Brightness}"/> lux
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" TextAlignment="Center">
+                                    🐇 <Run Text="{Binding Fertility}"/> µS/cm
+                                </TextBlock>
+                                <TextBlock Grid.Column="3" TextAlignment="Right">
+                                    🌡️ <Run Text="{Binding Temperature}"/>°C
+                                </TextBlock>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </ScrollViewer>
 </Page>

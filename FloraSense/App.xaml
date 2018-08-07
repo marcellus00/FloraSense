@@ -1,6 +1,11 @@
 ﻿<Application
     x:Class="FloraSense.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FloraSense">
+    <Application.Resources>
+        <ResourceDictionary >
+            <local:SampleData x:Key="SampleData"/>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

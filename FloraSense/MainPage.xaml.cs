@@ -10,16 +10,10 @@ namespace FloraSense
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public ObservableCollection<SensorDataDisplay> KnownDevices { get; set; }
-        public ObservableCollection<SensorDataDisplay> NewDevices { get; set; }
-
-        public MainPage()
-        {
-            this.InitializeComponent();
-            DataContext = this;
-            KnownDevices = new ObservableCollection<SensorDataDisplay>
+        public ObservableCollection<SensorDataModel> KnownDevices { get; } =
+            new ObservableCollection<SensorDataModel>
             {
-                new SensorDataDisplay
+                new SensorDataModel
                 {
                     Name = "Mini rose",
                     Moisture = 75,
@@ -28,7 +22,7 @@ namespace FloraSense
                     Brightness = 150,
                     Battery = 100
                 },
-                new SensorDataDisplay
+                new SensorDataModel
                 {
                     Name = "Fig rubber",
                     Moisture = 75,
@@ -38,7 +32,12 @@ namespace FloraSense
                     Battery = 100
                 }
             };
-            NewDevices = new ObservableCollection<SensorDataDisplay>();
+
+        public ObservableCollection<SensorDataModel> NewDevices { get; } = new ObservableCollection<SensorDataModel>();
+
+        public MainPage()
+        {
+            this.InitializeComponent();
         }
     }
 }
