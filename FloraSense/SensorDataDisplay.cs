@@ -19,10 +19,10 @@ namespace FloraSense
             get => base.Moisture;
             set => base.Moisture = value;
         }
-        public ushort Fertility
+        public new ushort Fertility
         {
-            get => Conductivity;
-            set => Conductivity = value;
+            get => base.Fertility;
+            set => base.Fertility = value;
         } 
         public new uint Brightness
         {

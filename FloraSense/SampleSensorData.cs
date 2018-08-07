@@ -1,10 +1,15 @@
-﻿namespace FloraSense
+﻿using System.Collections.ObjectModel;
+
+namespace FloraSense
 {
-    public class SampleData: SensorDataCollection
+    public class SampleSensorData
     {
-        public SampleData()
+        public ObservableCollection<SensorDataDisplay> KnownDevices { get; set; }
+
+        public SampleSensorData()
         {
-            Items.AddRange(new []{
+            KnownDevices = new ObservableCollection<SensorDataDisplay>
+            {
                 new SensorDataDisplay
                 {
                     Name = "Mini rose",
@@ -32,7 +37,7 @@
                     Brightness = 174,
                     Battery = 99
                 }
-            });
+            };
         }
     }
 }

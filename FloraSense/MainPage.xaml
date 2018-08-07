@@ -46,10 +46,10 @@
     <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0"
                   BorderBrush="AntiqueWhite" BorderThickness="1">
 
-        <StackPanel BorderBrush="Red" BorderThickness="10">
+        <StackPanel BorderThickness="10">
             <ListView  x:Name="SensorDataListView" 
-                   ItemsSource="{Binding Items}"
-                   d:DataContext="{d:DesignInstance Type=local:SampleData, IsDesignTimeCreatable=True}"
+                   ItemsSource="{x:Bind KnownDevices}"
+                   d:DataContext="{d:DesignInstance Type=local:SampleSensorData, IsDesignTimeCreatable=True}"
                    ItemTemplate="{StaticResource SensorDataTemplate}"/>
         </StackPanel>
     </ScrollViewer>

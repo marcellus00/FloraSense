@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -9,13 +10,14 @@ namespace FloraSense
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public SensorDataCollection KnownDevices { get; set; }
-        public SensorDataCollection NewDevices { get; set; }
+        public ObservableCollection<SensorDataDisplay> KnownDevices { get; set; }
+        public ObservableCollection<SensorDataDisplay> NewDevices { get; set; }
 
         public MainPage()
         {
             this.InitializeComponent();
-            KnownDevices = new SensorDataCollection
+            DataContext = this;
+            KnownDevices = new ObservableCollection<SensorDataDisplay>
             {
                 new SensorDataDisplay
                 {
@@ -36,8 +38,7 @@ namespace FloraSense
                     Battery = 100
                 }
             };
-            NewDevices = new SensorDataCollection();
-            DataContext = KnownDevices;
+            NewDevices = new ObservableCollection<SensorDataDisplay>();
         }
     }
 }
