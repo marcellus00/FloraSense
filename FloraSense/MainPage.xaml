@@ -1,54 +1,68 @@
 ﻿<Page
     x:Class="FloraSense.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:FloraSense"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:FloraSense"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DesignWidth="500"
+    d:DesignHeight="700">
 
-    <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0"
+    <Page.Resources>
+        <ResourceDictionary >
+            <local:SampleData x:Key="SampleData"/>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto"
                   BorderBrush="AntiqueWhite" BorderThickness="1">
 
-        <ListView
-            ItemsSource="{Binding KnownDevices}"
+            <ListView ItemsSource="{Binding KnownDevices}"
             d:DataContext="{StaticResource SampleData}">
-            <ListView.ItemTemplate>
-                <DataTemplate >
-                    <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
                                Margin="10"/>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,5"/>
-                            <Grid Margin="0,0,0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" TextAlignment="Left">
-                                    💦 <Run Text="{Binding Moisture}"/>%
-                                </TextBlock>
-                                <TextBlock Grid.Column="2" TextAlignment="Center">
-                                    ☀️ <Run Text="{Binding Brightness}"/> lux
-                                </TextBlock>
-                                <TextBlock Grid.Column="1" TextAlignment="Center">
-                                    🐇 <Run Text="{Binding Fertility}"/> µS/cm
-                                </TextBlock>
-                                <TextBlock Grid.Column="3" TextAlignment="Right">
-                                    🌡️ <Run Text="{Binding Temperature}"/>°C
-                                </TextBlock>
-                            </Grid>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </ScrollViewer>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
+                                <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <Grid Margin="0,0,0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" TextAlignment="Left">
+                                    💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="2" TextAlignment="Center">
+                                    ☀️ <Run Text="{Binding Brightness, Mode=OneWay}"/> lux
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="1" TextAlignment="Center">
+                                    🐇 <Run Text="{Binding Fertility, Mode=OneWay}"/> µS/cm
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="3" TextAlignment="Right">
+                                    🌡️ <Run Text="{Binding Temperature, Mode=OneWay}"/>°C
+                                    </TextBlock>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+        <Button x:Name="RefreshButton" Grid.Row="1" Content="Refresh" HorizontalAlignment="Center" Margin="10" Width="200" Click="RefreshButton_Click" />
+    </Grid>
 </Page>

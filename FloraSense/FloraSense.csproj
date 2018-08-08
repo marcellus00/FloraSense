@@ -137,12 +137,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MiFloraReader">
-      <HintPath>..\..\MiFloraReader\MiFloraReader\bin\Debug\MiFloraReader.dll</HintPath>
-    </Reference>
+    <Folder Include="SampleData\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SampleData\" />
+    <Reference Include="MiFloraReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MiFloraReader\MiFloraReader\bin\x86\Debug\MiFloraReader.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
