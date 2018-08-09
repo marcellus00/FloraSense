@@ -5,64 +5,58 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:FloraSense"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     mc:Ignorable="d"
     d:DesignWidth="500"
-    d:DesignHeight="700">
+    d:DesignHeight="700"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Page.Resources>
-        <ResourceDictionary >
+        <ResourceDictionary>
             <local:SampleData x:Key="SampleData"/>
+            <DataTemplate x:Key="PlantTemplate">
+                <RelativePanel Margin="5" Height="200" Width="200">
+                    <Rectangle Fill="{ThemeResource SystemControlAcrylicElementBrush}"/>
+                    <Image Source="Assets/potted-plant_white.png" Stretch="Uniform" HorizontalAlignment="Left"/>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold"/>
+                        <TextBlock TextAlignment="Left">
+                                💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
+                        </TextBlock>
+                        <TextBlock TextAlignment="Center">
+                                ☀️ <Run Text="{Binding Brightness, Mode=OneWay}"/> lux
+                        </TextBlock>
+                        <TextBlock TextAlignment="Center">
+                                🐇 <Run Text="{Binding Fertility, Mode=OneWay}"/> µS/cm
+                        </TextBlock>
+                        <TextBlock TextAlignment="Right">
+                                🌡️ <Run Text="{Binding Temperature, Mode=OneWay}"/>°C
+                        </TextBlock>
+                    </StackPanel>
+                </RelativePanel>
+
+            </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto"
-                  BorderBrush="AntiqueWhite" BorderThickness="1">
+        <ProgressBar Grid.Row="0" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
 
-            <ListView ItemsSource="{Binding KnownDevices}"
-            d:DataContext="{StaticResource SampleData}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid BorderBrush="Black" BorderThickness="1" Margin="5" Width="450">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" Source="Assets/potted-plant.png" Stretch="Uniform" Height="50" Width="50"
-                               Margin="10"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,15,0">
-                                <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" Margin="0,0,0,5"/>
-                                <Grid Margin="0,0,0,5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="1.5*"/>
-                                        <ColumnDefinition Width="1.5*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" TextAlignment="Left">
-                                    💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="2" TextAlignment="Center">
-                                    ☀️ <Run Text="{Binding Brightness, Mode=OneWay}"/> lux
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="1" TextAlignment="Center">
-                                    🐇 <Run Text="{Binding Fertility, Mode=OneWay}"/> µS/cm
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="3" TextAlignment="Right">
-                                    🌡️ <Run Text="{Binding Temperature, Mode=OneWay}"/>°C
-                                    </TextBlock>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <GridView  ItemsSource="{Binding KnownDevices}"
+                       ItemTemplate="{StaticResource PlantTemplate}"
+                       d:DataContext="{StaticResource SampleData}"/>
+
         </ScrollViewer>
-        <Button x:Name="RefreshButton" Grid.Row="1" Content="Refresh" HorizontalAlignment="Center" Margin="10" Width="200" Click="RefreshButton_Click" />
+        <CommandBar Grid.Row="2" DefaultLabelPosition="Right" ClosedDisplayMode="Minimal">
+            <AppBarButton Icon="Add" Label="Add sensor" Click="RefreshButton_Click"/>
+            <AppBarButton Icon="Refresh" Label="Refresh" Click="RefreshButton_Click"/>
+            <AppBarButton Icon="Setting" Label="Settings" HorizontalAlignment="Left"/>
+        </CommandBar>
     </Grid>
 </Page>

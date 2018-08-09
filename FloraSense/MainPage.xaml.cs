@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using MiFlora;
 
@@ -44,7 +45,7 @@ namespace FloraSense
         public MainPage()
         {
             this.InitializeComponent();
-            DataContext = this;
+            //DataContext = this;
             _reader = new MiFloraReader();
             _reader.OnSensorDataRecieved += OnSensorDataRecieved;
             _reader.OnEnumerationCompleted += OnEnumerationCompleted;
@@ -52,7 +53,7 @@ namespace FloraSense
 
         private async void OnEnumerationCompleted(bool b)
         {
-            await RunAsync(() => { RefreshButton.IsEnabled = true; });
+            await RunAsync(() => { ProgressBar.Visibility = Visibility.Collapsed; });
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
@@ -63,14 +64,14 @@ namespace FloraSense
             await RunAsync(() => KnownDevices.Add(model));
         }
 
-        private void RefreshButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             Refresh();
         }
 
         private void Refresh()
         {
-            RefreshButton.IsEnabled = false;
+            ProgressBar.Visibility = Visibility.Visible;
             KnownDevices.Clear();
             _reader.StartDeviceWatcher();
         }

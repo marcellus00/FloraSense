@@ -15,7 +15,7 @@ namespace FloraSense
         {
             Name = sensorData.Name;
             Moisture = sensorData.Moisture;
-            Fertility = sensorData.Conductivity;
+            Fertility = sensorData.Fertility;
             Brightness = sensorData.Brightness;
             Temperature = sensorData.Temperature;
             Battery = sensorData.Battery;
