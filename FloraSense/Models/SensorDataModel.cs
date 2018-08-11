@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using FloraSense.Annotations;
 using MiFlora;
@@ -40,12 +41,12 @@ namespace FloraSense
         }
         #endregion
 
-        public void Update(SensorData sensorData, bool preserveName = false)
+        public void Update(SensorData sensorData)
         {
             DeviceId = sensorData.DeviceId;
             OnPropertyChanged(nameof(DeviceId));
 
-            if(!preserveName)
+            if(!Known)
                 Name = sensorData.Name;
             OnPropertyChanged(nameof(Name));
 
@@ -72,5 +73,6 @@ namespace FloraSense
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        
     }
 }

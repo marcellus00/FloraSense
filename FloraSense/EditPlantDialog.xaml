@@ -1,0 +1,19 @@
+﻿<ContentDialog
+    x:Class="FloraSense.EditPlantDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FloraSense"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Edit plant details"
+    PrimaryButtonText="Save"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_SaveButtonClick"
+    SecondaryButtonClick="ContentDialog_CancelButtonClick"
+    DefaultButton="Primary">
+
+    <StackPanel>
+        <TextBox x:Name="PlantNameInput" Header="Plant name" Text="{x:Bind Plant, Mode=TwoWay}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+    </StackPanel>
+</ContentDialog>

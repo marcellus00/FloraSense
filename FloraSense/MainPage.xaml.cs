@@ -24,7 +24,6 @@ namespace FloraSense
             KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
             RefreshButton.IsEnabled = KnownDevices.Any();
             _reader = new MiFloraReader();
-            _reader.OnSensorDataRecieved += OnSensorDataRecieved;
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
@@ -32,16 +31,12 @@ namespace FloraSense
             await RunAsync(() =>
             {
                 var knownDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
-                if (knownDevice != null)
+                if (knownDevice == null)
                 {
-                    knownDevice.Update(sensorData, true);
+                    knownDevice = new SensorDataModel();
+                    KnownDevices.Add(knownDevice);
                 }
-                else
-                {
-                    var model = new SensorDataModel();
-                    KnownDevices.Add(model);
-                    model.Update(sensorData);
-                }
+                knownDevice.Update(sensorData);
             });
         }
 
@@ -54,7 +49,7 @@ namespace FloraSense
             foreach (var model in KnownDevices)
             {
                 var data = await _reader.PollDevice(model.DeviceId);
-                model.Update(data, true);
+                model.Update(data);
             }
 
             RefreshButton.IsEnabled = true;
@@ -78,7 +73,7 @@ namespace FloraSense
             FinishButton.Show(false);
 
             _reader.OnEnumerationCompleted = null;
-            _reader.OnWatcherStoped = null;
+            _reader.OnSensorDataRecieved = null;
             _reader.StopDeviceWatcher();
 
             ProgressBar.Show(false);
@@ -94,6 +89,7 @@ namespace FloraSense
         {
             ProgressBar.Show(true);
 
+            _reader.OnSensorDataRecieved += OnSensorDataRecieved;
             _reader.OnEnumerationCompleted += OnEnumerationCompleted;
             _reader.StartDeviceWatcher();
         }
@@ -112,6 +108,28 @@ namespace FloraSense
         private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(SettingsPage));
+        }
+
+        private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)
+        {
+            var editDialog = new EditPlantDialog();
+            var item = e.ClickedItem as SensorDataModel;
+            editDialog.Plant = item.Name;
+
+            var result = await editDialog.ShowAsync();
+            switch (result)
+            {
+                case ContentDialogResult.Secondary:
+                case ContentDialogResult.None:
+                    break;
+                case ContentDialogResult.Primary:
+                    if(item.Name != editDialog.Plant)
+                    {
+                        item.Name = editDialog.Plant;
+                        SaveData.Save(KnownDevices);
+                    }
+                    break;
+            }
         }
     }
 }

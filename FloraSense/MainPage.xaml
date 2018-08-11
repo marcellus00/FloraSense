@@ -5,15 +5,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sampleData="using:FloraSense.SampleData"
+    xmlns:floraSense="using:FloraSense"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     mc:Ignorable="d"
     d:DesignWidth="500"
-    d:DesignHeight="700"
+    d:DesignHeight="400"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Page.Resources>
         <ResourceDictionary>
             <sampleData:SampleData x:Key="SampleData"/>
+            <Style TargetType="TextBlock" x:Key="TextStyle">
+                <Setter Property="Foreground" Value="White" />
+                <Setter  Property="HorizontalAlignment" Value="Center"/> 
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -23,29 +29,52 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
-
+        <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <GridView  ItemsSource="{Binding KnownDevices, Mode=OneWay}"
-                       d:DataContext="{StaticResource SampleData}">
+                       d:DataContext="{StaticResource SampleData}"
+                       IsItemClickEnabled="True"
+                       ItemClick="PlantsList_OnItemClick"
+                       Padding="5,5,0,0">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <RelativePanel Margin="5,5,0,0" Padding="10" Background="ForestGreen">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" VerticalAlignment="Center" Width="66"/>
-                                <CheckBox IsChecked="{Binding Known, Mode=TwoWay}" HorizontalAlignment="Right" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}" />
-                                <TextBlock>
+                        <RelativePanel Background="ForestGreen" Width="490">
+                            <TextBlock x:Name="PlantName"
+                                       Text="{Binding Name, Mode=OneWay}"
+                                       FontSize="20"
+                                       FontWeight="Bold" Foreground="White"
+                                       Margin="10,5,0,0" 
+                                       RelativePanel.AlignTopWithPanel="True"
+                                       RelativePanel.AlignLeftWithPanel="True" />
+                            <floraSense:Pin IsPinned="{Binding Known, Mode=TwoWay}"
+                                            RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}"
+                                            Foreground="White" Margin="0,2,0,0"/>
+                            <!--
+                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}"
+                            -->
+                            <Grid Margin="0,5,5,10"
+                                RelativePanel.Below="PlantName"
+                                RelativePanel.AlignLeftWithPanel="True" 
+                                RelativePanel.AlignRightWithPanel="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
                                     💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
                                 </TextBlock>
-                                <TextBlock>
+                                <TextBlock Grid.Column="1" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
                                     🐇 <Run Text="{Binding Fertility, Mode=OneWay}"/> µS/cm
                                 </TextBlock>
-                                <TextBlock>
+                                <TextBlock Grid.Column="2" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
                                     ☀️ <Run Text="{Binding Brightness, Mode=OneWay}"/> lux
                                 </TextBlock>
-                                <TextBlock>
+                                <TextBlock Grid.Column="3" Style="{StaticResource TextStyle}">
                                     🌡️ <Run Text="{Binding Temperature, Mode=OneWay}"/>°C
                                 </TextBlock>
-                            </StackPanel>
+                            </Grid>
                         </RelativePanel>
                     </DataTemplate>
                 </GridView.ItemTemplate>
