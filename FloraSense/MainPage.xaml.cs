@@ -15,8 +15,6 @@ namespace FloraSense
         private readonly MiFloraReader _reader;
 
         public SensorDataCollection KnownDevices { get; }
-
-        public bool AddMode => AddButton.Visibility == Visibility.Collapsed;
         
         public MainPage()
         {
@@ -36,9 +34,7 @@ namespace FloraSense
                 var knownDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
                 if (knownDevice != null)
                 {
-                    var knownName = knownDevice.Name;
-                    knownDevice.Update(sensorData);
-                    knownDevice.Name = knownName;
+                    knownDevice.Update(sensorData, true);
                 }
                 else
                 {
@@ -52,12 +48,17 @@ namespace FloraSense
         private async void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             RefreshButton.IsEnabled = false;
+            AddButton.IsEnabled = false;
             ProgressBar.Show(true);
 
-            foreach (var sensorDataModel in KnownDevices)
-                await _reader.PollDevice(sensorDataModel.DeviceId);
+            foreach (var model in KnownDevices)
+            {
+                var data = await _reader.PollDevice(model.DeviceId);
+                model.Update(data, true);
+            }
 
             RefreshButton.IsEnabled = true;
+            AddButton.IsEnabled = true;
             ProgressBar.Show(false);
         }
 
@@ -84,7 +85,8 @@ namespace FloraSense
             foreach (var model in KnownDevices.ToList())
                 if(!model.Known)
                     KnownDevices.Remove(model);
-            
+
+            RefreshButton.IsEnabled = KnownDevices.Any();
             SaveData.Save(KnownDevices);
         }
 

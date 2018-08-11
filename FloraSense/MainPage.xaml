@@ -32,7 +32,7 @@
                         <RelativePanel Margin="5,5,0,0" Padding="10" Background="ForestGreen">
                             <StackPanel>
                                 <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" VerticalAlignment="Center" Width="66"/>
-                                <CheckBox IsChecked="{Binding Known, Mode=TwoWay}" HorizontalAlignment="Right" />
+                                <CheckBox IsChecked="{Binding Known, Mode=TwoWay}" HorizontalAlignment="Right" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}" />
                                 <TextBlock>
                                     💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
                                 </TextBlock>
@@ -52,7 +52,7 @@
             </GridView>
 
         </ScrollViewer>
-        <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,3"/>
+        <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
         <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>

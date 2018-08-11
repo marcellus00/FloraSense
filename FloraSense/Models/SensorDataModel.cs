@@ -40,12 +40,13 @@ namespace FloraSense
         }
         #endregion
 
-        public void Update(SensorData sensorData)
+        public void Update(SensorData sensorData, bool preserveName = false)
         {
             DeviceId = sensorData.DeviceId;
             OnPropertyChanged(nameof(DeviceId));
 
-            Name = sensorData.Name;
+            if(!preserveName)
+                Name = sensorData.Name;
             OnPropertyChanged(nameof(Name));
 
             Moisture = sensorData.Moisture;
