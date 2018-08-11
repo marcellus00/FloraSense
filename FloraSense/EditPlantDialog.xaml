@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FloraSense"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Title="Edit plant details"
     PrimaryButtonText="Save"
@@ -15,5 +16,13 @@
 
     <StackPanel>
         <TextBox x:Name="PlantNameInput" Header="Plant name" Text="{x:Bind Plant, Mode=TwoWay}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+        <!--<TextBlock Text="Recommended moisture" />
+        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
+        <TextBlock Text="Recommended fertility" />
+        <controls:RangeSelector Minimum="0" Maximum="9000" StepFrequency="1"/>
+        <TextBlock Text="Recommended brightness" />
+        <controls:RangeSelector Minimum="0" Maximum="60000" StepFrequency="1"/>
+        <TextBlock Text="Recommended temperature" />
+        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>-->
     </StackPanel>
 </ContentDialog>

@@ -22,8 +22,15 @@ namespace FloraSense
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             
             KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
-            RefreshButton.IsEnabled = KnownDevices.Any();
+            CheckList();
             _reader = new MiFloraReader();
+        }
+
+        private void CheckList()
+        {
+            var anySensors = KnownDevices.Any();
+            RefreshButton.IsEnabled = anySensors;
+            WelcomeTip.Show(!anySensors);
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
@@ -81,7 +88,7 @@ namespace FloraSense
                 if(!model.Known)
                     KnownDevices.Remove(model);
 
-            RefreshButton.IsEnabled = KnownDevices.Any();
+            CheckList();
             SaveData.Save(KnownDevices);
         }
 

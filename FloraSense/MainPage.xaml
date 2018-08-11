@@ -4,8 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sampleData="using:FloraSense.SampleData"
-    xmlns:floraSense="using:FloraSense"
+    xmlns:as="using:FloraSense.SampleData"
+    xmlns:fs="using:FloraSense"
     Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     mc:Ignorable="d"
     d:DesignWidth="500"
@@ -14,18 +14,40 @@
 
     <Page.Resources>
         <ResourceDictionary>
-            <sampleData:SampleData x:Key="SampleData"/>
+            <as:SampleData x:Key="SampleData"/>
             <Style TargetType="TextBlock" x:Key="TextStyle">
                 <Setter Property="Foreground" Value="White" />
-                <Setter  Property="HorizontalAlignment" Value="Center"/> 
+                <Setter  Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="FontSize" Value="20"/>
             </Style>
+            <Style TargetType="fs:MeasurementView" x:Key="MeasureStyle">
+                <Setter Property="Foreground" Value="White" />
+                <Setter  Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <LinearGradientBrush x:Key="Gradient1" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#00b09b" Offset="0"/>
+                <GradientStop Color="#96c93d" Offset="1"/>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="Gradient2" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#093028" Offset="0"/>
+                <GradientStop Color="#237A57" Offset="1"/>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="Gradient3" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#43C6AC" Offset="0"/>
+                <GradientStop Color="#191654" Offset="1"/>
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="Gradient4" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#56ab2f" Offset="0"/>
+                <GradientStop Color="#a8e063" Offset="1"/>
+            </LinearGradientBrush>
         </ResourceDictionary>
     </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -37,7 +59,10 @@
                        Padding="5,5,0,0">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <RelativePanel Background="ForestGreen" Width="490">
+                        <RelativePanel Width="490">
+                            <Rectangle Opacity="0.7" Fill="{StaticResource Gradient1}"
+                                       RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                                       RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
                             <TextBlock x:Name="PlantName"
                                        Text="{Binding Name, Mode=OneWay}"
                                        FontSize="20"
@@ -45,7 +70,7 @@
                                        Margin="10,5,0,0" 
                                        RelativePanel.AlignTopWithPanel="True"
                                        RelativePanel.AlignLeftWithPanel="True" />
-                            <floraSense:Pin IsPinned="{Binding Known, Mode=TwoWay}"
+                            <fs:Pin IsPinned="{Binding Known, Mode=TwoWay}"
                                             RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}"
                                             Foreground="White" Margin="0,2,0,0"/>
@@ -62,18 +87,14 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
-                                    💦 <Run Text="{Binding Moisture, Mode=OneWay}"/>%
-                                </TextBlock>
-                                <TextBlock Grid.Column="1" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
-                                    🐇 <Run Text="{Binding Fertility, Mode=OneWay}"/> µS/cm
-                                </TextBlock>
-                                <TextBlock Grid.Column="2" Style="{StaticResource TextStyle}" Margin="0,0,5,0">
-                                    ☀️ <Run Text="{Binding Brightness, Mode=OneWay}"/> lux
-                                </TextBlock>
-                                <TextBlock Grid.Column="3" Style="{StaticResource TextStyle}">
-                                    🌡️ <Run Text="{Binding Temperature, Mode=OneWay}"/>°C
-                                </TextBlock>
+                                <fs:MeasurementView Icon="💦" Value="{Binding Moisture, Mode=OneWay}" Unit="%"
+                                                             Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
+                                <fs:MeasurementView Icon="🐇" Value="{Binding Fertility, Mode=OneWay}" Unit=" µS/cm"
+                                                            Grid.Column="1" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
+                                <fs:MeasurementView Icon="☀️" Value="{Binding Brightness, Mode=OneWay}" Unit=" lux"
+                                                            Grid.Column="2" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
+                                <fs:MeasurementView Icon="🌡️" Value="{Binding Temperature, Mode=OneWay}" Unit="°C"
+                                                            Grid.Column="3" Style="{StaticResource MeasureStyle}"/>
                             </Grid>
                         </RelativePanel>
                     </DataTemplate>
@@ -81,8 +102,13 @@
             </GridView>
 
         </ScrollViewer>
-        <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
-        <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
+
+        <TextBlock Grid.Row="1" x:Name="WelcomeTip"
+                   Text="Use add button below to find and add your plant sensors." 
+                   FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
+                   HorizontalAlignment="Center" Margin="0,0,0,20"/>
+        <ProgressBar Grid.Row="2" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
+        <CommandBar Grid.Row="3" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
