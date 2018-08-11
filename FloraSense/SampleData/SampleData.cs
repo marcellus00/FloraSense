@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace FloraSense
+namespace FloraSense.SampleData
 {
     public class SampleData
     {

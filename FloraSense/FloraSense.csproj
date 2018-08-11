@@ -95,18 +95,26 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\SettingsModel.cs" />
+    <Compile Include="SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleData.cs" />
-    <Compile Include="SensorDataModel.cs" />
+    <Compile Include="SampleData\SampleData.cs" />
+    <Compile Include="SaveData.cs" />
+    <Compile Include="SensorDataCollection.cs" />
+    <Compile Include="Models\SensorDataModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\Greenery.png" />
     <None Include="FloraSense_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,12 +148,9 @@
       <Version>6.1.7</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="SampleData\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MiFloraReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MiFloraReader">
       <HintPath>..\..\MiFloraReader\MiFloraReader\bin\x86\Debug\MiFloraReader.dll</HintPath>
     </Reference>
   </ItemGroup>

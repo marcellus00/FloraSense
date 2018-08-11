@@ -1,85 +1,115 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using FloraSense.Helpers;
 using MiFlora;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace FloraSense
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private readonly MiFloraReader _reader;
 
-        public ObservableCollection<SensorDataModel> KnownDevices { get; } =
-            new ObservableCollection<SensorDataModel>
-            {
-                new SensorDataModel
-                {
-                    Name = "Mini rose",
-                    Moisture = 75,
-                    Temperature = 28.3f,
-                    Fertility = 3000,
-                    Brightness = 150,
-                    Battery = 100
-                },
-                new SensorDataModel
-                {
-                    Name = "Fig rubber",
-                    Moisture = 75,
-                    Temperature = 28.3f,
-                    Fertility = 3000,
-                    Brightness = 150,
-                    Battery = 100
-                }
-            };
+        public SensorDataCollection KnownDevices { get; }
 
-        public ObservableCollection<SensorDataModel> NewDevices { get; } = new ObservableCollection<SensorDataModel>();
-
+        public bool AddMode => AddButton.Visibility == Visibility.Collapsed;
+        
         public MainPage()
         {
             this.InitializeComponent();
-            //DataContext = this;
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+            
+            KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
+            RefreshButton.IsEnabled = KnownDevices.Any();
             _reader = new MiFloraReader();
             _reader.OnSensorDataRecieved += OnSensorDataRecieved;
-            _reader.OnEnumerationCompleted += OnEnumerationCompleted;
-        }
-
-        private async void OnEnumerationCompleted(bool b)
-        {
-            await RunAsync(() => { ProgressBar.Visibility = Visibility.Collapsed; });
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
         {
-            var model = new SensorDataModel();
-            model.Update(sensorData);
-
-            await RunAsync(() => KnownDevices.Add(model));
+            await RunAsync(() =>
+            {
+                var knownDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
+                if (knownDevice != null)
+                {
+                    var knownName = knownDevice.Name;
+                    knownDevice.Update(sensorData);
+                    knownDevice.Name = knownName;
+                }
+                else
+                {
+                    var model = new SensorDataModel();
+                    KnownDevices.Add(model);
+                    model.Update(sensorData);
+                }
+            });
         }
 
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            Refresh();
+            RefreshButton.IsEnabled = false;
+            ProgressBar.Show(true);
+
+            foreach (var sensorDataModel in KnownDevices)
+                await _reader.PollDevice(sensorDataModel.DeviceId);
+
+            RefreshButton.IsEnabled = true;
+            ProgressBar.Show(false);
         }
 
-        private void Refresh()
+        private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
-            ProgressBar.Visibility = Visibility.Visible;
-            KnownDevices.Clear();
+            RefreshButton.IsEnabled = false;
+            AddButton.Show(false);
+            FinishButton.Show(true);
+
+            EnumerateDevices();
+        }
+
+        private void FinishAddButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            RefreshButton.IsEnabled = true;
+            AddButton.Show(true);
+            FinishButton.Show(false);
+
+            _reader.OnEnumerationCompleted = null;
+            _reader.OnWatcherStoped = null;
+            _reader.StopDeviceWatcher();
+
+            ProgressBar.Show(false);
+            foreach (var model in KnownDevices.ToList())
+                if(!model.Known)
+                    KnownDevices.Remove(model);
+            
+            SaveData.Save(KnownDevices);
+        }
+
+        private void EnumerateDevices()
+        {
+            ProgressBar.Show(true);
+
+            _reader.OnEnumerationCompleted += OnEnumerationCompleted;
             _reader.StartDeviceWatcher();
+        }
+
+        private async void OnEnumerationCompleted()
+        {
+            await RunAsync(() => { ProgressBar.Show(false); });
         }
 
         private async Task RunAsync(DispatchedHandler callback)
         {
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal, callback);
+        }
+
+        private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(SettingsPage));
         }
     }
 }
