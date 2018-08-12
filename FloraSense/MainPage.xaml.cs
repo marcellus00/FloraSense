@@ -57,6 +57,8 @@ namespace FloraSense
             _adItem.Show(false);
 
             await CheckList();
+            if (_settings.PollOnStart)
+                await Refresh();
         }
 
         private void OnSuspend(object sender, SuspendingEventArgs e)
@@ -71,11 +73,7 @@ namespace FloraSense
             RefreshButton.IsEnabled = anySensors;
             WelcomeTip.Show(!anySensors);
             if (anySensors)
-            {
-                if(_settings.PollOnStart)
-                    await Refresh();
                 _adItem.Show(true);
-            }
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
