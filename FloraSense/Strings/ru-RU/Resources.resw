@@ -126,6 +126,12 @@
   <data name="CelsiusUnit.Text" xml:space="preserve">
     <value>°C</value>
   </data>
+  <data name="ComboPoll.Header" xml:space="preserve">
+    <value>Обновлять на старте</value>
+  </data>
+  <data name="ComboUnits.Header" xml:space="preserve">
+    <value>Единица измерения</value>
+  </data>
   <data name="EditDialog.PrimaryButtonText" xml:space="preserve">
     <value>Сохранить</value>
   </data>
@@ -147,6 +153,9 @@
   <data name="Moisture.Unit" xml:space="preserve">
     <value>%</value>
   </data>
+  <data name="No.Text" xml:space="preserve">
+    <value>Нет</value>
+  </data>
   <data name="PlantName.Header" xml:space="preserve">
     <value>Название растения</value>
   </data>
@@ -157,6 +166,15 @@
     <value>MAC-адрес датчика</value>
   </data>
   <data name="Settings.Label" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="SettingsWindow.PrimaryButtonText" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SettingsWindow.SecondaryButtonText" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="SettingsWindow.Title" xml:space="preserve">
     <value>Настройки</value>
   </data>
   <data name="WelcomeTip1.Text" xml:space="preserve">
@@ -170,5 +188,8 @@
   </data>
   <data name="WelcomeTipAnd.Text" xml:space="preserve">
     <value>и </value>
+  </data>
+  <data name="Yes.Text" xml:space="preserve">
+    <value>Да</value>
   </data>
 </root>

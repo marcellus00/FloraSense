@@ -36,7 +36,7 @@ namespace FloraSense
             if(!string.IsNullOrEmpty(data))
             {
                 var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                localSettings.Values[nameof(T)] = data;
+                localSettings.Values[typeof(T).Name] = data;
             }
         }
 
@@ -45,7 +45,7 @@ namespace FloraSense
             var serializer = new XmlSerializer(typeof(T));
 
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            var value = (string) localSettings.Values[nameof(T)];
+            var value = (string) localSettings.Values[typeof(T).Name];
 
             var data = default(T);
 

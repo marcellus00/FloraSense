@@ -6,10 +6,11 @@ namespace FloraSense
     public class BoolToYes : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language) =>
-            (bool) value ? "Yes" : "No";
+            (bool) value ? 1 : 0;
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language) =>
-            ((string) value).Equals("Yes");
-
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return (int) value == 1;
+        }
     }
 }

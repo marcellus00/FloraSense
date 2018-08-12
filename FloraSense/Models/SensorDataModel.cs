@@ -10,12 +10,12 @@ namespace FloraSense
     public class SensorDataModel : INotifyPropertyChanged
     {
         public bool IsValid => !string.IsNullOrEmpty(DeviceId);
+        public float Fahrenheit => Temperature * 1.8f + 32f;
 
         public string DeviceId { get; set; }
         public int Moisture { get; set; }
         public ushort Fertility { get; set; }
         public uint Brightness { get; set; }
-        public float Temperature { get; set; }
         public int Battery { get; set; }
         public string Firmware { get; set; }
         public string LastUpdate { get; set; }
@@ -31,6 +31,19 @@ namespace FloraSense
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        private float _temperature;
+
+        public float Temperature
+        {
+            get => _temperature;
+            set
+            {
+                _temperature = value;
+                OnPropertyChanged(nameof(Temperature));
+                OnPropertyChanged(nameof(Fahrenheit));
             }
         }
 

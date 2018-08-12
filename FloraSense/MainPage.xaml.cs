@@ -1,22 +1,22 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using FloraSense.Annotations;
 using FloraSense.Helpers;
-using Microsoft.Advertising.WinRT.UI;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using MiFlora;
-using Newtonsoft.Json.Bson;
 
 namespace FloraSense
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
         private readonly MiFloraReader _reader;
         private readonly SensorDataModel _adModel;
@@ -29,6 +29,7 @@ namespace FloraSense
         private bool IsBusy => ProgressBar.Visibility == Visibility.Visible;
 
         public SensorDataCollection KnownDevices { get; }
+        public bool IsCelsius => _settings.Temp == SettingsModel.Units.C;
         
         public MainPage()
         {
@@ -48,14 +49,14 @@ namespace FloraSense
             KnownDevices.Add(_adModel);
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             _adItem = DataGridView.ContainerFromItem(_adModel) as GridViewItem;
             _adItem.ContentTemplate = _adTemplate;
             _adItem.Template = _blankTemplate;
             _adItem.Show(false);
 
-            CheckList();
+            await CheckList();
         }
 
         private void OnSuspend(object sender, SuspendingEventArgs e)
@@ -64,13 +65,17 @@ namespace FloraSense
             SaveData.Save(KnownDevices);
         }
 
-        private void CheckList()
+        private async Task CheckList()
         {
             var anySensors = KnownDevices.Any(model => model != _adModel);
             RefreshButton.IsEnabled = anySensors;
             WelcomeTip.Show(!anySensors);
-            if(anySensors)
+            if (anySensors)
+            {
+                if(_settings.PollOnStart)
+                    await Refresh();
                 _adItem.Show(true);
+            }
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
@@ -88,6 +93,11 @@ namespace FloraSense
         }
 
         private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Refresh();
+        }
+
+        private async Task Refresh()
         {
             SettingsButton.IsEnabled = false;
             RefreshButton.IsEnabled = false;
@@ -123,7 +133,7 @@ namespace FloraSense
             EnumerateDevices();
         }
 
-        private void FinishAddButton_OnClick(object sender, RoutedEventArgs e)
+        private async void FinishAddButton_OnClick(object sender, RoutedEventArgs e)
         {
             SettingsButton.IsEnabled = true;
             RefreshButton.IsEnabled = true;
@@ -140,7 +150,7 @@ namespace FloraSense
                     KnownDevices.Remove(model);
 
             SaveData.Save(KnownDevices);
-            CheckList();
+            await CheckList();
         }
 
         private void EnumerateDevices()
@@ -165,8 +175,14 @@ namespace FloraSense
 
         private async void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var settingsDialog = new SettingsDialog {Model = _settings};
-            await settingsDialog.ShowAsync();
+            var settingsDialog = new SettingsDialog(_settings);
+            var result = await settingsDialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                SaveData.Save(_settings);
+                OnPropertyChanged(nameof(IsCelsius));
+            }
         }
 
         private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)
@@ -195,12 +211,12 @@ namespace FloraSense
             (sender as FrameworkElement).FindDescendantByName("EditIcon").Show(false);
         }
 
-        private void Test2Button_OnClick(object sender, RoutedEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            SaveData.Clear();
-            KnownDevices.Clear();
-            SaveData.Save(KnownDevices);
-            CheckList();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

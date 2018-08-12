@@ -112,7 +112,7 @@
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Helpers\BoolToYes.cs" />
+    <Compile Include="Dialogs\BoolToYes.cs" />
     <Compile Include="Helpers\MacConverter.cs" />
     <Compile Include="Helpers\PercentFormatter.cs" />
     <Compile Include="Helpers\StringToVisibility.cs" />
