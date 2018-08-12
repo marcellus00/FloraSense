@@ -1,5 +1,6 @@
 ﻿<ContentDialog
     x:Class="FloraSense.EditPlantDialog"
+    x:Uid="EditDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FloraSense"
@@ -15,7 +16,7 @@
     DefaultButton="Primary">
 
     <StackPanel>
-        <TextBox x:Name="PlantNameInput" Header="Plant name" Text="{x:Bind Plant, Mode=TwoWay}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+        <TextBox x:Uid="PlantNameInput" x:Name="PlantNameInput" Header="Plant name" Text="{x:Bind Plant, Mode=TwoWay}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
         <!--<TextBlock Text="Recommended moisture" />
         <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
         <TextBlock Text="Recommended fertility" />

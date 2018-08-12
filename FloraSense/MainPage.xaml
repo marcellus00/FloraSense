@@ -87,13 +87,13 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <fs:MeasurementView Icon="💦" Value="{Binding Moisture, Mode=OneWay}" Unit="%"
+                                <fs:MeasurementView Icon="💦" Value="{Binding Moisture, Mode=OneWay}" Unit="%" x:Uid="Moisture"
                                                              Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
-                                <fs:MeasurementView Icon="🐇" Value="{Binding Fertility, Mode=OneWay}" Unit=" µS/cm"
+                                <fs:MeasurementView Icon="🐇" Value="{Binding Fertility, Mode=OneWay}" Unit=" µS/cm" x:Uid="Fertility"
                                                             Grid.Column="1" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
-                                <fs:MeasurementView Icon="☀️" Value="{Binding Brightness, Mode=OneWay}" Unit=" lux"
+                                <fs:MeasurementView Icon="☀️" Value="{Binding Brightness, Mode=OneWay}" Unit=" lux" x:Uid="Brightness"
                                                             Grid.Column="2" Margin="0,0,5,0" Style="{StaticResource MeasureStyle}"/>
-                                <fs:MeasurementView Icon="🌡️" Value="{Binding Temperature, Mode=OneWay}" Unit="°C"
+                                <fs:MeasurementView Icon="🌡️" Value="{Binding Temperature, Mode=OneWay}" Unit="°C" x:Uid="Temperature"
                                                             Grid.Column="3" Style="{StaticResource MeasureStyle}"/>
                             </Grid>
                         </RelativePanel>
@@ -104,15 +104,16 @@
         </ScrollViewer>
 
         <TextBlock Grid.Row="1" x:Name="WelcomeTip"
+                   x:Uid="WelcomeTip"
                    Text="Use add button below to find and add your plant sensors." 
                    FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
                    HorizontalAlignment="Center" Margin="0,0,0,20"/>
         <ProgressBar Grid.Row="2" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
         <CommandBar Grid.Row="3" DefaultLabelPosition="Right">
-            <AppBarButton Icon="Add" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
-            <AppBarButton Icon="Accept" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
-            <AppBarButton Icon="Refresh" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
-            <AppBarButton Icon="Setting" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" Visibility="Collapsed" />
+            <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
+            <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
+            <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
+            <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" Visibility="Collapsed" />
         </CommandBar>
     </Grid>
 </Page>
