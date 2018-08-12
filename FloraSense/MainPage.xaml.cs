@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using FloraSense.Helpers;
+using Microsoft.Advertising.WinRT.UI;
 using MiFlora;
 
 namespace FloraSense
@@ -13,17 +17,24 @@ namespace FloraSense
     public sealed partial class MainPage : Page
     {
         private readonly MiFloraReader _reader;
+        private readonly SensorDataModel _adModel = new SensorDataModel {IsAd = true };
 
         public SensorDataCollection KnownDevices { get; }
         
         public MainPage()
         {
             this.InitializeComponent();
+            Application.Current.Suspending += OnSuspend;
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
             
             KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
             CheckList();
             _reader = new MiFloraReader();
+        }
+
+        private void OnSuspend(object sender, SuspendingEventArgs e)
+        {
+            SaveData.Save(KnownDevices);
         }
 
         private void CheckList()
@@ -137,6 +148,15 @@ namespace FloraSense
                     }
                     break;
             }
+        }
+
+        private void AdControl_OnErrorOccurred(object sender, AdErrorEventArgs e)
+        {
+            
+        }
+
+        private void SensorData_OnPointerEntered(object sender, PointerRoutedEventArgs e)
+        {
         }
     }
 }

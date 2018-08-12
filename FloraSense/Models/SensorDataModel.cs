@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using FloraSense.Annotations;
 using MiFlora;
@@ -15,8 +17,21 @@ namespace FloraSense
         public uint Brightness { get; set; }
         public float Temperature { get; set; }
         public int Battery { get; set; }
+        public string LastUpdate { get; set; }
 
         #region ManuallyUpdated
+
+        private bool _isAd;
+        public bool IsAd
+        {
+            get => _isAd;
+            set
+            {
+                _isAd = value;
+                OnPropertyChanged(nameof(IsAd));
+            }
+        }
+
         private string _name;
 
         public string Name
@@ -64,6 +79,9 @@ namespace FloraSense
 
             Battery = sensorData.Battery;
             OnPropertyChanged(nameof(Battery));
+
+            LastUpdate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+            OnPropertyChanged(nameof(LastUpdate));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

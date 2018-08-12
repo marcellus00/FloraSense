@@ -150,7 +150,13 @@
   <data name="Settings.Label" xml:space="preserve">
     <value>Настройки</value>
   </data>
-  <data name="WelcomeTip.Text" xml:space="preserve">
-    <value>Используйте кнопку добавить,чтобы найти датчики растений.</value>
+  <data name="WelcomeTip1.Text" xml:space="preserve">
+    <value>Используйте</value>
+  </data>
+  <data name="WelcomeTip2.Text" xml:space="preserve">
+    <value>чтобы найти датчики и</value>
+  </data>
+  <data name="WelcomeTip3.Text" xml:space="preserve">
+    <value>чтобы их запомнить.</value>
   </data>
 </root>

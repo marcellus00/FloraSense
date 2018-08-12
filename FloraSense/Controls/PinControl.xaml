@@ -7,9 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
-    </UserControl.Resources>
+
     <Button Click="OnClick" Background="#00000000">
         <Grid>
             <SymbolIcon Symbol="Pin" 
