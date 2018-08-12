@@ -8,6 +8,13 @@ namespace FloraSense
 {
     public class SaveData
     {
+        public static void Clear()
+        {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            foreach (var container in localSettings.Containers)
+                localSettings.DeleteContainer(container.Key);
+        }
+
         public static void Save<T>(T save)
         {
             var serializer = new XmlSerializer(typeof(T));

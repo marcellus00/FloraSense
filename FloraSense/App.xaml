@@ -6,5 +6,8 @@
 
     <Application.Resources>
         <floraSense:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <floraSense:MacConverter x:Key="MacConverter"/>
+        <floraSense:PercentFormatter x:Key="PercentFormatter"/>
+        <floraSense:StringToVisibilityConverter x:Key="StringToVisibility"/>
     </Application.Resources>
 </Application>

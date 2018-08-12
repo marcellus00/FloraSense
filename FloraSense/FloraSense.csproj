@@ -22,7 +22,7 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
@@ -109,6 +109,9 @@
       <DependentUpon>EditPlantDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Helpers\MacConverter.cs" />
+    <Compile Include="Helpers\PercentFormatter.cs" />
+    <Compile Include="Helpers\StringToVisibility.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Controls\PinControl.xaml.cs">
       <DependentUpon>PinControl.xaml</DependentUpon>
@@ -131,6 +134,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\BannerAd.png" />
+    <Content Include="Assets\BannerBlur.png" />
+    <Content Include="Assets\BannerClear.png" />
     <Content Include="Assets\Greenery.png" />
     <None Include="FloraSense_StoreKey.pfx" />
     <None Include="FloraSense_TemporaryKey.pfx" />
@@ -234,7 +240,7 @@
   <ItemGroup>
     <Reference Include="MiFloraReader, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MiFloraReader\MiFloraReader\bin\x86\Debug\MiFloraReader.dll</HintPath>
+      <HintPath>..\..\MiFloraReader\MiFloraReader\bin\x86\Release\MiFloraReader.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

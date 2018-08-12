@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using FloraSense.Annotations;
@@ -10,27 +9,18 @@ namespace FloraSense
 {
     public class SensorDataModel : INotifyPropertyChanged
     {
-        public string DeviceId { get; set; }
+        public bool IsValid => !string.IsNullOrEmpty(DeviceId);
 
+        public string DeviceId { get; set; }
         public int Moisture { get; set; }
         public ushort Fertility { get; set; }
         public uint Brightness { get; set; }
         public float Temperature { get; set; }
         public int Battery { get; set; }
+        public string Firmware { get; set; }
         public string LastUpdate { get; set; }
-
+        
         #region ManuallyUpdated
-
-        private bool _isAd;
-        public bool IsAd
-        {
-            get => _isAd;
-            set
-            {
-                _isAd = value;
-                OnPropertyChanged(nameof(IsAd));
-            }
-        }
 
         private string _name;
 
@@ -60,8 +50,9 @@ namespace FloraSense
         {
             DeviceId = sensorData.DeviceId;
             OnPropertyChanged(nameof(DeviceId));
+            OnPropertyChanged(nameof(IsValid));
 
-            if(!Known)
+            if (!Known)
                 Name = sensorData.Name;
             OnPropertyChanged(nameof(Name));
 
@@ -80,6 +71,9 @@ namespace FloraSense
             Battery = sensorData.Battery;
             OnPropertyChanged(nameof(Battery));
 
+            Firmware = sensorData.Verison;
+            OnPropertyChanged(nameof(Firmware));
+
             LastUpdate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             OnPropertyChanged(nameof(LastUpdate));
         }
@@ -91,6 +85,5 @@ namespace FloraSense
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        
     }
 }

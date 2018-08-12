@@ -141,11 +141,14 @@
   <data name="Moisture.Unit" xml:space="preserve">
     <value>%</value>
   </data>
-  <data name="PlantNameInput.Header" xml:space="preserve">
+  <data name="PlantName.Header" xml:space="preserve">
     <value>Название растения</value>
   </data>
   <data name="RefreshSensors.Label" xml:space="preserve">
     <value>Обновить</value>
+  </data>
+  <data name="SensorMac.Header" xml:space="preserve">
+    <value>MAC-адрес датчика</value>
   </data>
   <data name="Settings.Label" xml:space="preserve">
     <value>Настройки</value>

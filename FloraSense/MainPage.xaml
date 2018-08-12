@@ -40,9 +40,21 @@
                 <GradientStop Color="#56ab2f" Offset="0"/>
                 <GradientStop Color="#a8e063" Offset="1"/>
             </LinearGradientBrush>
-            <Style TargetType="GridViewItem">
-
-            </Style>
+            <DataTemplate x:Key="AdTemplate">
+                <Viewbox Width="490">
+                    <UI:AdControl
+                        ApplicationId="9np89fzm6n5f"
+                        AdUnitId="1100028866"
+                        Width="728"
+                        Height="90"/>
+                </Viewbox>
+            </DataTemplate>
+            <DataTemplate x:Key="AdTemplateDummy">
+                <Image Source="Assets/BannerAd.png" Width="490" Height="100" Stretch="UniformToFill" />
+            </DataTemplate>
+            <ControlTemplate TargetType="GridViewItem" x:Key="BlankTemplate">
+                <ListViewItemPresenter />
+            </ControlTemplate>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -51,30 +63,38 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
+        <TextBlock Grid.Row="0" x:Name="WelcomeTip"
+                   FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
+                   HorizontalAlignment="Center" Margin="30,20,30,0">
+            <Run x:Uid="WelcomeTip1" Text="Use"/><Run FontFamily="Segoe MDL2 Assets"  Text=" &#xE710; " FontSize="25"/><Run x:Uid="WelcomeTip2"  Text="to find your sensors"/><LineBreak/>
+            <Run Text="and "/><Run FontFamily="Segoe MDL2 Assets"  Text= "&#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text=" to remember them."/>
+        </TextBlock>
+        <ScrollViewer Grid.Row="0"  VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <GridView  ItemsSource="{Binding KnownDevices, Mode=OneWay}"
                        d:DataContext="{StaticResource SampleData}"
+                       x:Name="DataGridView"
                        IsItemClickEnabled="True"
                        ItemClick="PlantsList_OnItemClick"
                        Padding="5,5,0,0">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <RelativePanel Width="490" x:Name="SensorData" PointerEntered="SensorData_OnPointerEntered"
-                                       Visibility="{Binding IsAd, Converter={StaticResource BooleanToVisibility}, ConverterParameter=Reverse}">
-                            
+                        <RelativePanel Width="490" x:Name="SensorData" PointerEntered="SensorData_OnPointerEntered" PointerExited="SensorData_OnPointerExited"
+                            Visibility="{Binding DeviceId, Converter={StaticResource StringToVisibility}, Mode=OneWay}">
+
                             <Rectangle Opacity="0.7" Fill="{StaticResource Gradient1}"
                                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
-                                <TextBlock x:Name="PlantName"
+                            <!--<Image Source="Assets/BannerBlur.png"
+                                   RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
+                                   RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />-->
+                            <TextBlock x:Name="PlantName"
                                        FontSize="20"
                                        FontWeight="Bold" Foreground="White"
                                        Margin="20,15,0,0" 
                                        RelativePanel.AlignTopWithPanel="True"
-                                       RelativePanel.AlignLeftWithPanel="True">
-                                <Run Text="{Binding Name, Mode=OneWay}"/>
-                            </TextBlock>
+                                       RelativePanel.AlignLeftWithPanel="True"
+                                           Text="{Binding Name, Mode=OneWay}" />
                             <TextBlock x:Name="EditIcon" FontFamily="Segoe MDL2 Assets" Text=" &#xE70F;" FontSize="15" Foreground="{Binding ElementName=PlantName, Path=Foreground}"
                                        RelativePanel.RightOf="PlantName" RelativePanel.AlignVerticalCenterWith="PlantName" Margin="5,15,0,0" Visibility="Collapsed" />
                             <fs:Pin IsPinned="{Binding Known, Mode=TwoWay}"
@@ -114,18 +134,13 @@
 
         </ScrollViewer>
 
-        <TextBlock Grid.Row="1" x:Name="WelcomeTip"
-                   FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
-                   HorizontalAlignment="Center" Margin="0,0,0,20">
-            <Run x:Uid="WelcomeTip1" Text="Use"/><Run FontFamily="Segoe MDL2 Assets"  Text=" &#xE710; " FontSize="25"/><Run x:Uid="WelcomeTip2"  Text="to find your sensors and"/>
-            <Run FontFamily="Segoe MDL2 Assets"  Text= "&#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text="to remember them."/>
-        </TextBlock>
-        <ProgressBar Grid.Row="2" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
-        <CommandBar Grid.Row="3" DefaultLabelPosition="Right">
+        <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
+        <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
             <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" Visibility="Collapsed" />
+            <AppBarButton Icon="Setting" Label="Settings" Click="Test2Button_OnClick" />
         </CommandBar>
     </Grid>
 </Page>

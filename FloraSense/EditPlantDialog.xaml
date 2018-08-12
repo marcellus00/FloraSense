@@ -16,7 +16,10 @@
     DefaultButton="Primary">
 
     <StackPanel>
-        <TextBox x:Uid="PlantNameInput" x:Name="PlantNameInput" Header="Plant name" Text="{x:Bind Plant, Mode=TwoWay}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+        <TextBox x:Uid="PlantName" x:Name="PlantName" Header="Plant name" Text="{x:Bind Model.Name, Mode=OneTime}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+        <TextBox x:Uid="SensorMac" x:Name="SensorMac" Header="Sensor MAC" Text="{x:Bind Model.DeviceId, Mode=OneTime, Converter={StaticResource MacConverter}}" IsEnabled="False"/>
+        <TextBox x:Uid="SensorBattery" x:Name="SensorBattery" Header="Battery" Text="{x:Bind Model.Battery, Mode=OneTime, Converter={StaticResource PercentFormatter}}" IsEnabled="False"/>
+        <TextBox x:Uid="Firmware" x:Name="Firmware" Header="Firmware" Text="{x:Bind Model.Firmware, Mode=OneTime}" IsEnabled="False"/>
         <!--<TextBlock Text="Recommended moisture" />
         <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
         <TextBlock Text="Recommended fertility" />

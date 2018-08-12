@@ -6,55 +6,81 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using FloraSense.Helpers;
 using Microsoft.Advertising.WinRT.UI;
+using Microsoft.Toolkit.Uwp.UI.Extensions;
 using MiFlora;
+using Newtonsoft.Json.Bson;
 
 namespace FloraSense
 {
     public sealed partial class MainPage : Page
     {
         private readonly MiFloraReader _reader;
-        private readonly SensorDataModel _adModel = new SensorDataModel {IsAd = true };
+        private readonly SensorDataModel _adModel;
+        private readonly DataTemplate _adTemplate;
+        private readonly ControlTemplate _blankTemplate;
+
+        private GridViewItem _adItem;
+
+        private bool IsBusy => ProgressBar.Visibility == Visibility.Visible;
 
         public SensorDataCollection KnownDevices { get; }
         
         public MainPage()
         {
-            this.InitializeComponent();
             Application.Current.Suspending += OnSuspend;
+            this.Loaded += OnLoaded;
+            this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
-            
-            KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
-            CheckList();
+
             _reader = new MiFloraReader();
+            _adModel = new SensorDataModel {Known = true};
+            _adTemplate = (DataTemplate)Resources["AdTemplate"];
+            _blankTemplate = (ControlTemplate)Resources["BlankTemplate"];
+
+            KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
+            KnownDevices.Add(_adModel);
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            _adItem = DataGridView.ContainerFromItem(_adModel) as GridViewItem;
+            _adItem.ContentTemplate = _adTemplate;
+            _adItem.Template = _blankTemplate;
+            _adItem.Show(false);
+
+            CheckList();
         }
 
         private void OnSuspend(object sender, SuspendingEventArgs e)
         {
+            KnownDevices.Remove(_adModel);
             SaveData.Save(KnownDevices);
         }
 
         private void CheckList()
         {
-            var anySensors = KnownDevices.Any();
+            var anySensors = KnownDevices.Any(model => model != _adModel);
             RefreshButton.IsEnabled = anySensors;
             WelcomeTip.Show(!anySensors);
+            if(anySensors)
+                _adItem.Show(true);
         }
 
         private async void OnSensorDataRecieved(SensorData sensorData)
         {
             await RunAsync(() =>
             {
-                var knownDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
-                if (knownDevice == null)
+                var sensorDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
+                if (sensorDevice == null)
                 {
-                    knownDevice = new SensorDataModel();
-                    KnownDevices.Add(knownDevice);
+                    sensorDevice = new SensorDataModel();
+                    KnownDevices.Insert(KnownDevices.Count - 1, sensorDevice);
                 }
-                knownDevice.Update(sensorData);
+                sensorDevice.Update(sensorData);
             });
         }
 
@@ -66,8 +92,12 @@ namespace FloraSense
 
             foreach (var model in KnownDevices)
             {
+                if (!model.IsValid) continue;
                 var data = await _reader.PollDevice(model.DeviceId);
-                model.Update(data);
+                if (string.IsNullOrEmpty(data.Error))
+                    model.Update(data);
+                else
+                    model.LastUpdate = "Error";
             }
 
             RefreshButton.IsEnabled = true;
@@ -77,9 +107,11 @@ namespace FloraSense
 
         private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _adItem.Show(false);
             RefreshButton.IsEnabled = false;
             AddButton.Show(false);
             FinishButton.Show(true);
+            WelcomeTip.Show(false);
 
             EnumerateDevices();
         }
@@ -99,8 +131,8 @@ namespace FloraSense
                 if(!model.Known)
                     KnownDevices.Remove(model);
 
-            CheckList();
             SaveData.Save(KnownDevices);
+            CheckList();
         }
 
         private void EnumerateDevices()
@@ -130,33 +162,36 @@ namespace FloraSense
 
         private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)
         {
+            if(IsBusy) return;
             var editDialog = new EditPlantDialog();
             var item = e.ClickedItem as SensorDataModel;
-            editDialog.Plant = item.Name;
-
-            var result = await editDialog.ShowAsync();
-            switch (result)
+            if (item == _adModel) return;
+            if (!item.IsValid)
             {
-                case ContentDialogResult.Secondary:
-                case ContentDialogResult.None:
-                    break;
-                case ContentDialogResult.Primary:
-                    if(item.Name != editDialog.Plant)
-                    {
-                        item.Name = editDialog.Plant;
-                        SaveData.Save(KnownDevices);
-                    }
-                    break;
+                KnownDevices.Remove(item);
+                return;
             }
+            editDialog.Model = item;
+            await editDialog.ShowAsync();
         }
-
-        private void AdControl_OnErrorOccurred(object sender, AdErrorEventArgs e)
-        {
-            
-        }
-
+        
         private void SensorData_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
+            if(IsBusy) return;
+            (sender as FrameworkElement).FindDescendantByName("EditIcon").Show(true);
+        }
+
+        private void SensorData_OnPointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            (sender as FrameworkElement).FindDescendantByName("EditIcon").Show(false);
+        }
+
+        private void Test2Button_OnClick(object sender, RoutedEventArgs e)
+        {
+            SaveData.Clear();
+            KnownDevices.Clear();
+            SaveData.Save(KnownDevices);
+            CheckList();
         }
     }
 }

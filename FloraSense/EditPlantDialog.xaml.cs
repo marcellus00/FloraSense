@@ -6,7 +6,7 @@ namespace FloraSense
 {
     public sealed partial class EditPlantDialog : ContentDialog
     {
-        public string Plant { get; set; }
+        public SensorDataModel Model { get; set; }
 
         public EditPlantDialog()
         {
@@ -15,6 +15,7 @@ namespace FloraSense
 
         private void ContentDialog_SaveButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            Model.Name = PlantName.Text;
         }
 
         private void ContentDialog_CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

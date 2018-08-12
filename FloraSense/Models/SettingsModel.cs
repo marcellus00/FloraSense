@@ -10,6 +10,8 @@ namespace FloraSense.Models
     public class SettingsModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool RefreshOnStartup { get; set; }
         
         public TempUnit TemperatureUnit { get; set; }
         public List<string> TempUnits => Enum.GetNames(typeof(TempUnit)).ToList();
