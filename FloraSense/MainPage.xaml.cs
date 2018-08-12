@@ -22,6 +22,7 @@ namespace FloraSense
         private readonly SensorDataModel _adModel;
         private readonly DataTemplate _adTemplate;
         private readonly ControlTemplate _blankTemplate;
+        private readonly SettingsModel _settings;
 
         private GridViewItem _adItem;
 
@@ -31,6 +32,8 @@ namespace FloraSense
         
         public MainPage()
         {
+            _settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
+
             Application.Current.Suspending += OnSuspend;
             this.Loaded += OnLoaded;
             this.InitializeComponent();
@@ -86,6 +89,7 @@ namespace FloraSense
 
         private async void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
+            SettingsButton.IsEnabled = false;
             RefreshButton.IsEnabled = false;
             AddButton.IsEnabled = false;
             ProgressBar.Show(true);
@@ -100,6 +104,8 @@ namespace FloraSense
                     model.LastUpdate = "Error";
             }
 
+
+            SettingsButton.IsEnabled = true;
             RefreshButton.IsEnabled = true;
             AddButton.IsEnabled = true;
             ProgressBar.Show(false);
@@ -108,6 +114,7 @@ namespace FloraSense
         private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
             _adItem.Show(false);
+            SettingsButton.IsEnabled = false;
             RefreshButton.IsEnabled = false;
             AddButton.Show(false);
             FinishButton.Show(true);
@@ -118,6 +125,7 @@ namespace FloraSense
 
         private void FinishAddButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SettingsButton.IsEnabled = true;
             RefreshButton.IsEnabled = true;
             AddButton.Show(true);
             FinishButton.Show(false);
@@ -155,9 +163,10 @@ namespace FloraSense
                 CoreDispatcherPriority.Normal, callback);
         }
 
-        private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+        private async void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(SettingsPage));
+            var settingsDialog = new SettingsDialog {Model = _settings};
+            await settingsDialog.ShowAsync();
         }
 
         private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)

@@ -68,7 +68,7 @@
                    FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
                    HorizontalAlignment="Center" Margin="30,20,30,0">
             <Run x:Uid="WelcomeTip1" Text="Use"/><Run FontFamily="Segoe MDL2 Assets"  Text=" &#xE710; " FontSize="25"/><Run x:Uid="WelcomeTip2"  Text="to find your sensors"/><LineBreak/>
-            <Run Text="and "/><Run FontFamily="Segoe MDL2 Assets"  Text= "&#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text=" to remember them."/>
+            <Run x:Uid="WelcomeTipAnd" Text="and "/><Run FontFamily="Segoe MDL2 Assets"  Text= "&#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text=" to remember them."/>
         </TextBlock>
         <ScrollViewer Grid.Row="0"  VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <GridView  ItemsSource="{Binding KnownDevices, Mode=OneWay}"
@@ -139,8 +139,8 @@
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
-            <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" Visibility="Collapsed" />
-            <AppBarButton Icon="Setting" Label="Settings" Click="Test2Button_OnClick" />
+            <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
+            <!--<AppBarButton Icon="Setting" Label="Settings" Click="Test2Button_OnClick" />-->
         </CommandBar>
     </Grid>
 </Page>

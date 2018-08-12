@@ -123,6 +123,9 @@
   <data name="Brightness.Unit" xml:space="preserve">
     <value> lux</value>
   </data>
+  <data name="CelsiusUnit.Text" xml:space="preserve">
+    <value>°C</value>
+  </data>
   <data name="EditDialog.PrimaryButtonText" xml:space="preserve">
     <value>Сохранить</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="EditDialog.Title" xml:space="preserve">
     <value>Редактировать свойства растения</value>
+  </data>
+  <data name="FahrenheitUnit.Text" xml:space="preserve">
+    <value>°F</value>
   </data>
   <data name="Fertility.Unit" xml:space="preserve">
     <value> µS/cm</value>
@@ -157,9 +163,12 @@
     <value>Используйте</value>
   </data>
   <data name="WelcomeTip2.Text" xml:space="preserve">
-    <value>чтобы найти датчики и</value>
+    <value>чтобы найти датчики</value>
   </data>
   <data name="WelcomeTip3.Text" xml:space="preserve">
     <value>чтобы их запомнить.</value>
+  </data>
+  <data name="WelcomeTipAnd.Text" xml:space="preserve">
+    <value>и </value>
   </data>
 </root>
