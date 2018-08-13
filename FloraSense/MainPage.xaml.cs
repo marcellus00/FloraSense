@@ -54,6 +54,7 @@ namespace FloraSense
             _adItem = DataGridView.ContainerFromItem(_adModel) as GridViewItem;
             _adItem.ContentTemplate = _adTemplate;
             _adItem.Template = _blankTemplate;
+            _adItem.IsTabStop = false;
             _adItem.Show(false);
 
             await CheckList();

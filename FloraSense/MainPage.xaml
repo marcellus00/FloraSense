@@ -86,9 +86,6 @@
                             <Rectangle Opacity="0.7" Fill="{StaticResource Gradient1}"
                                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
-                            <!--<Image Source="Assets/BannerBlur.png"
-                                   RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
-                                   RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />-->
                             <TextBlock x:Name="PlantName"
                                        FontSize="20"
                                        FontWeight="Bold" Foreground="White"
@@ -135,14 +132,12 @@
             </GridView>
 
         </ScrollViewer>
-
         <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
         <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
             <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
-            <!--<AppBarButton Icon="Setting" Label="Settings" Click="Test2Button_OnClick" />-->
         </CommandBar>
     </Grid>
 </Page>

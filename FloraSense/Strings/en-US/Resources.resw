@@ -118,10 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddSensors.Label" xml:space="preserve">
-    <value>Add sensors</value>
+    <value>Add/Remove</value>
   </data>
   <data name="Brightness.Unit" xml:space="preserve">
     <value> lux</value>
+  </data>
+  <data name="Brightness.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Brightness</value>
   </data>
   <data name="CelsiusUnit.Text" xml:space="preserve">
     <value>°C</value>
@@ -147,11 +150,17 @@
   <data name="Fertility.Unit" xml:space="preserve">
     <value> µS/cm</value>
   </data>
+  <data name="Fertility.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Fertility</value>
+  </data>
   <data name="FinishAdd.Label" xml:space="preserve">
     <value>Finish</value>
   </data>
   <data name="Moisture.Unit" xml:space="preserve">
     <value>%</value>
+  </data>
+  <data name="Moisture.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Moisture</value>
   </data>
   <data name="No.Text" xml:space="preserve">
     <value>No</value>
@@ -176,6 +185,9 @@
   </data>
   <data name="SettingsWindow.Title" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="Temperature.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Temperature</value>
   </data>
   <data name="WelcomeTip1.Text" xml:space="preserve">
     <value>Use</value>

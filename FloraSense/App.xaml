@@ -9,6 +9,5 @@
         <floraSense:MacConverter x:Key="MacConverter"/>
         <floraSense:PercentFormatter x:Key="PercentFormatter"/>
         <floraSense:StringToVisibilityConverter x:Key="StringToVisibility"/>
-        <floraSense:TemperatureUnits x:Key="TemperatureUnits"/>
     </Application.Resources>
 </Application>
