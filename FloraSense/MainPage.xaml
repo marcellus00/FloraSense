@@ -8,11 +8,11 @@
     xmlns:as="using:FloraSense.SampleData"
     xmlns:fs="using:FloraSense"
     xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
-    Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     mc:Ignorable="d"
     d:DesignWidth="500"
     d:DesignHeight="500"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <!--Background="{ThemeResource SystemControlAcrylicWindowBrush}"-->
 
     <Page.Resources>
         <ResourceDictionary>
@@ -65,12 +65,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" x:Name="WelcomeTip"
+        <TextBlock Grid.Row="0" x:Name="WelcomeTip" xml:space="preserve" 
                    FontSize="30" TextWrapping="WrapWholeWords" TextAlignment="Center"
-                   HorizontalAlignment="Center" Margin="30,20,30,0">
-            <Run x:Uid="WelcomeTip1" Text="Use"/><Run FontFamily="Segoe MDL2 Assets"  Text=" &#xE710; " FontSize="25"/><Run x:Uid="WelcomeTip2"  Text="to find your sensors"/><LineBreak/>
-            <Run x:Uid="WelcomeTipAnd" Text="and "/><Run FontFamily="Segoe MDL2 Assets"  Text= "&#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text=" to remember them."/>
-        </TextBlock>
+                   HorizontalAlignment="Center" Margin="30,20,30,0"><Run x:Uid="WelcomeTip1" Text="Use"/><Run FontFamily="Segoe MDL2 Assets" Text=" &#xE710; " FontSize="25"/><Run x:Uid="WelcomeTip2"  Text="to find your sensors"/><LineBreak/><Run x:Uid="WelcomeTipAnd" Text="and "/><Run FontFamily="Segoe MDL2 Assets" Text= " &#xE718; " FontSize="25"/><Run x:Uid="WelcomeTip3"  Text=" to remember them."/></TextBlock>
         <ScrollViewer Grid.Row="0"  VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
             <GridView  ItemsSource="{Binding KnownDevices, Mode=OneWay}"
                        d:DataContext="{StaticResource SampleData}"
@@ -99,7 +96,7 @@
                                             RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}"
                                             Foreground="White" Margin="0,2,0,0"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,15,15,0"
+                            <StackPanel Orientation="Horizontal" Margin="0,15,20,0"
                                         RelativePanel.AlignVerticalCenterWith="PlantName"  RelativePanel.AlignRightWithPanel="True">
                                 <TextBlock Foreground="White" Opacity="0.5"
                                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=AddButton, Path=Visibility}">
@@ -110,7 +107,7 @@
                             <!--
                             
                             -->
-                            <Grid Margin="0,15,5,15" x:Name="MeasurementsGrid"
+                            <Grid Margin="5,15,10,15" x:Name="MeasurementsGrid"
                                 RelativePanel.Below="PlantName"
                                 RelativePanel.AlignLeftWithPanel="True" 
                                 RelativePanel.AlignRightWithPanel="True">
