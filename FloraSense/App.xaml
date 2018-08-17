@@ -9,5 +9,42 @@
         <floraSense:MacConverter x:Key="MacConverter"/>
         <floraSense:PercentFormatter x:Key="PercentFormatter"/>
         <floraSense:StringToVisibilityConverter x:Key="StringToVisibility"/>
+        <floraSense:StringToTheme x:Key="StringToTheme"/>
+        <floraSense:StringToBrush x:Key="StringToBrush"/>
+
+        <floraSense:ThemeCollection x:Key="ThemeCollection">
+            <floraSense:Theme Name="Garden Green" TextColor="White">
+                <floraSense:Theme.Brush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#00b09b" Offset="0"/>
+                        <GradientStop Color="#96c93d" Offset="1"/>
+                    </LinearGradientBrush>
+                </floraSense:Theme.Brush>
+            </floraSense:Theme>
+            <floraSense:Theme Name="Midnight Forest" TextColor="White">
+                <floraSense:Theme.Brush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#43C6AC" Offset="0"/>
+                        <GradientStop Color="#191654" Offset="1"/>
+                    </LinearGradientBrush>
+                </floraSense:Theme.Brush>
+            </floraSense:Theme>
+            <floraSense:Theme Name="Greenhouse Dusk" TextColor="White">
+                <floraSense:Theme.Brush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#093028" Offset="0"/>
+                        <GradientStop Color="#237A57" Offset="1"/>
+                    </LinearGradientBrush>
+                </floraSense:Theme.Brush>
+            </floraSense:Theme>
+            <floraSense:Theme Name="Spring Sprouts" TextColor="White">
+                <floraSense:Theme.Brush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#56ab2f" Offset="0"/>
+                        <GradientStop Color="#a8e063" Offset="1"/>
+                    </LinearGradientBrush>
+                </floraSense:Theme.Brush>
+            </floraSense:Theme>
+        </floraSense:ThemeCollection>
     </Application.Resources>
 </Application>

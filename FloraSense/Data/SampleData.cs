@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace FloraSense.SampleData
+namespace FloraSense
 {
     public class SampleData
     {
@@ -14,7 +14,8 @@ namespace FloraSense.SampleData
                 Temperature = 28.3f,
                 Fertility = 3000,
                 Brightness = 150,
-                Battery = 100
+                Battery = 100,
+                Known = true
             },
             new SensorDataModel
             {
@@ -24,7 +25,8 @@ namespace FloraSense.SampleData
                 Temperature = 28.2f,
                 Fertility = 2500,
                 Brightness = 175,
-                Battery = 100
+                Battery = 100,
+                Known = true
             },
             new SensorDataModel
             {
@@ -34,7 +36,8 @@ namespace FloraSense.SampleData
                 Temperature = 28.3f,
                 Fertility = 2100,
                 Brightness = 174,
-                Battery = 99
+                Battery = 99,
+                Known = true
             }
         };
     }

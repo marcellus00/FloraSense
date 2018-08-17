@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloraSense", "FloraSense\Fl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFloraReader", "..\MiFloraReader\MiFloraReader\MiFloraReader.csproj", "{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloraBackground", "FloraBackground\FloraBackground.csproj", "{41D1F75A-164D-4523-A576-D00560AA9853}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloraShared", "FloraShared\FloraShared.csproj", "{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,38 @@ Global
 		{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}.Release|x64.Build.0 = Release|x64
 		{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}.Release|x86.ActiveCfg = Release|x86
 		{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}.Release|x86.Build.0 = Release|x86
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|ARM.ActiveCfg = Debug|ARM
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|ARM.Build.0 = Debug|ARM
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|x64.ActiveCfg = Debug|x64
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|x64.Build.0 = Debug|x64
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|x86.ActiveCfg = Debug|x86
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Debug|x86.Build.0 = Debug|x86
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|ARM.ActiveCfg = Release|ARM
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|ARM.Build.0 = Release|ARM
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|x64.ActiveCfg = Release|x64
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|x64.Build.0 = Release|x64
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|x86.ActiveCfg = Release|x86
+		{41D1F75A-164D-4523-A576-D00560AA9853}.Release|x86.Build.0 = Release|x86
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|ARM.Build.0 = Debug|ARM
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|x64.ActiveCfg = Debug|x64
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|x64.Build.0 = Debug|x64
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|x86.ActiveCfg = Debug|x86
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Debug|x86.Build.0 = Debug|x86
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|ARM.ActiveCfg = Release|ARM
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|ARM.Build.0 = Release|ARM
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|x64.ActiveCfg = Release|x64
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|x64.Build.0 = Release|x64
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|x86.ActiveCfg = Release|x86
+		{FFEFA8AF-0931-4A3D-8596-1EEC7654025E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,7 @@
 ﻿<ContentDialog
     x:Class="FloraSense.SettingsDialog"
     x:Uid="SettingsWindow"
+    x:Name="Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FloraSense"
@@ -12,21 +13,33 @@
     PrimaryButtonText="Save"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    d:DesignHeight="640">
     <ContentDialog.Resources>
         <local:BoolToYes x:Key="BoolToYes"/>
         <local:UnitsToIdx x:Key="UnitsToIdx"/>
     </ContentDialog.Resources>
     <StackPanel>
         <ComboBox x:Uid="ComboPoll" Header="Poll sensors on start" Margin="0,0,0,15" 
-                  SelectedIndex="{x:Bind Poll, Converter={StaticResource BoolToYes}, Mode=TwoWay}">
+                  SelectedIndex="{Binding ElementName=Settings, Path=Backup.PollOnStart, Converter={StaticResource BoolToYes}, Mode=TwoWay}">
             <TextBlock x:Uid="No" Text="No"/>
             <TextBlock x:Uid="Yes" Text="Yes"/>
         </ComboBox>
-        <ComboBox x:Uid="ComboUnits" Header="Temperature units" Margin="0,0,0,20"
-                  SelectedIndex="{x:Bind Units, Converter={StaticResource UnitsToIdx}, Mode=TwoWay}">
+        <ComboBox x:Uid="ComboUnits" Header="Temperature units" Margin="0,0,0,15"
+                  SelectedIndex="{Binding ElementName=Settings, Path=Backup.TempUnits, Converter={StaticResource UnitsToIdx}, Mode=TwoWay}">
             <TextBlock Text="°C"/>
             <TextBlock Text="°F"/>
+        </ComboBox>
+        <ComboBox x:Uid="Theme" Header="Theme" Margin="0,0,0,20" ItemsSource="{StaticResource ThemeCollection}" 
+                  SelectedValue="{Binding ElementName=Settings, Path=Backup.ThemeName, Mode=TwoWay, Converter={StaticResource StringToTheme}}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="local:Theme">
+                    <Grid Background="{Binding Brush}">
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding TextColor}" FontWeight="Bold" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox/>
         </ComboBox>
     </StackPanel>
 </ContentDialog>

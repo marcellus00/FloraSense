@@ -9,7 +9,7 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-     <TextBlock>
+    <TextBlock FontSize="{Binding ElementName=Measurement, Path=FontSize}" Foreground="{Binding ElementName=Measurement, Path=Foreground}">
         <Run Text="{Binding ElementName=Measurement, Path=Icon}"/> <Run Text="{Binding ElementName=Measurement, Path=Value}"/><Run Text="{Binding ElementName=Measurement, Path=Unit}"/>
     </TextBlock>
 </UserControl>

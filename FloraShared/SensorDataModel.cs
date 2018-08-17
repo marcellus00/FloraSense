@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using FloraSense.Annotations;
+using FloraShared.Annotations;
 using MiFlora;
 
 namespace FloraSense

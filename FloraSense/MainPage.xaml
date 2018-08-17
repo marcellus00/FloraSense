@@ -1,60 +1,45 @@
 ﻿<Page
     x:Class="FloraSense.MainPage"
-    x:Name="Page"
+    x:Name="FloraMain"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:as="using:FloraSense.SampleData"
     xmlns:fs="using:FloraSense"
-    xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
+    xmlns:ui="using:Microsoft.Advertising.WinRT.UI"
     mc:Ignorable="d"
-    d:DesignWidth="500"
+    d:DesignWidth="480"
     d:DesignHeight="500"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <!--Background="{ThemeResource SystemControlAcrylicWindowBrush}"-->
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    KeyDown="MainPage_OnKeyDown">
 
     <Page.Resources>
         <ResourceDictionary>
-            <as:SampleData x:Key="SampleData"/>
+            <fs:SampleData x:Key="SampleData"/>
             <Style TargetType="fs:MeasurementView" x:Key="MeasureStyleLast">
-                <Setter Property="Foreground" Value="White" />
-                <Setter  Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="18" />
             </Style>
-            <Style TargetType="fs:MeasurementView" BasedOn="{StaticResource MeasureStyleLast}">
+            <Style TargetType="fs:MeasurementView" x:Key="MeasureStyle" BasedOn="{StaticResource MeasureStyleLast}">
                 <Setter Property="Margin" Value="0,0,5,0"/>
             </Style>
-            <LinearGradientBrush x:Key="Gradient1" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#00b09b" Offset="0"/>
-                <GradientStop Color="#96c93d" Offset="1"/>
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="Gradient2" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#093028" Offset="0"/>
-                <GradientStop Color="#237A57" Offset="1"/>
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="Gradient3" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#43C6AC" Offset="0"/>
-                <GradientStop Color="#191654" Offset="1"/>
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="Gradient4" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#56ab2f" Offset="0"/>
-                <GradientStop Color="#a8e063" Offset="1"/>
-            </LinearGradientBrush>
             <DataTemplate x:Key="AdTemplate">
                 <Viewbox Width="490">
-                    <UI:AdControl
+                    <!--<ui:AdControl 
+                        ApplicationId="d25517cb-12d4-4699-8bdc-52040c712cab"
+                        AdUnitId="test"
+                        Width="640"
+                        Height="100" AdRefreshed="AdControl_OnAdRefreshed" ErrorOccurred="AdControl_OnErrorOccurred" />-->
+                    <ui:AdControl 
                         ApplicationId="9np89fzm6n5f"
-                        AdUnitId="1100028866"
-                        Width="728"
-                        Height="90"/>
+                        AdUnitId="1100029460"
+                        Width="640"
+                        Height="100" AdRefreshed="AdControl_OnAdRefreshed" ErrorOccurred="AdControl_OnErrorOccurred" />
                 </Viewbox>
             </DataTemplate>
-            <DataTemplate x:Key="AdTemplateDummy">
-                <Image Source="Assets/BannerAd.png" Width="490" Height="100" Stretch="UniformToFill" />
-            </DataTemplate>
             <ControlTemplate TargetType="GridViewItem" x:Key="BlankTemplate">
-                <ListViewItemPresenter />
+                <GridViewItemPresenter />
             </ControlTemplate>
         </ResourceDictionary>
     </Page.Resources>
@@ -74,67 +59,79 @@
                        x:Name="DataGridView"
                        IsItemClickEnabled="True"
                        ItemClick="PlantsList_OnItemClick"
-                       Padding="5,5,0,0">
+                       Padding="5,5,0,0"
+                       HorizontalAlignment="Stretch">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <RelativePanel Width="490" x:Name="SensorData" PointerEntered="SensorData_OnPointerEntered" PointerExited="SensorData_OnPointerExited"
-                            Visibility="{Binding DeviceId, Converter={StaticResource StringToVisibility}, Mode=OneWay}">
+                        <Grid>
+                            <RelativePanel x:Name="SensorData" PointerEntered="SensorData_OnPointerEntered" PointerExited="SensorData_OnPointerExited"
+                                           Width="490" Visibility="{Binding DeviceId, Converter={StaticResource StringToVisibility}, Mode=OneWay}">
 
-                            <Rectangle Opacity="0.7" Fill="{StaticResource Gradient1}"
+                                <Rectangle Opacity="0.7" 
+                                       Fill="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FloraMain, Path=ThemeName, Mode=OneWay, Converter={StaticResource StringToBrush}}"
                                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                        RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
-                            <TextBlock x:Name="PlantName"
+                                <TextBlock x:Name="PlantName" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"
                                        FontSize="20"
-                                       FontWeight="Bold" Foreground="White"
+                                       FontWeight="Bold"
                                        Margin="20,15,0,0" 
                                        RelativePanel.AlignTopWithPanel="True"
                                        RelativePanel.AlignLeftWithPanel="True"
                                            Text="{Binding Name, Mode=OneWay}" />
-                            <TextBlock x:Name="EditIcon" FontFamily="Segoe MDL2 Assets" Text=" &#xE70F;" FontSize="15" Foreground="{Binding ElementName=PlantName, Path=Foreground}"
+                                <TextBlock x:Name="EditIcon" FontFamily="Segoe MDL2 Assets" Text=" &#xE70F;" FontSize="15" Foreground="{Binding ElementName=PlantName, Path=Foreground}"
                                        RelativePanel.RightOf="PlantName" RelativePanel.AlignVerticalCenterWith="PlantName" Margin="5,15,0,0" Visibility="Collapsed" />
-                            <fs:Pin IsPinned="{Binding Known, Mode=TwoWay}"
+                                <fs:Pin IsPinned="{Binding Known, Mode=TwoWay}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"
                                             RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True"
                                             Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FinishButton, Path=Visibility}"
-                                            Foreground="White" Margin="0,2,0,0"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,15,20,0"
+                                            Margin="0,2,0,0"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,15,20,0"
                                         RelativePanel.AlignVerticalCenterWith="PlantName"  RelativePanel.AlignRightWithPanel="True">
-                                <TextBlock Foreground="White" Opacity="0.5"
+                                    <TextBlock Opacity="0.5" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"
                                            Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=AddButton, Path=Visibility}">
                                     <Run Text="{Binding LastUpdate, Mode=OneWay}" FontSize="15"/>
                                     <Run FontFamily="Segoe MDL2 Assets" Text=" &#xE72C;" FontSize="10"/>
-                                </TextBlock>
-                            </StackPanel>
-                            <!--
-                            
-                            -->
-                            <Grid Margin="5,15,10,15" x:Name="MeasurementsGrid"
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <Grid Margin="5,15,10,15"
                                 RelativePanel.Below="PlantName"
                                 RelativePanel.AlignLeftWithPanel="True" 
                                 RelativePanel.AlignRightWithPanel="True">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <fs:MeasurementView Grid.Column="0" Icon="💦" Value="{Binding Moisture, Mode=OneWay}" Unit="%" x:Uid="Moisture" ToolTipService.ToolTip="Moisture"/>
-                                <fs:MeasurementView Grid.Column="1" Icon="🐇" Value="{Binding Fertility, Mode=OneWay}" Unit=" µS/cm" x:Uid="Fertility" ToolTipService.ToolTip="Fertility"/>
-                                <fs:MeasurementView Grid.Column="2" Icon="☀️" Value="{Binding Brightness, Mode=OneWay}" Unit=" lux" x:Uid="Brightness" ToolTipService.ToolTip="Brightness"/>
-                                <fs:MeasurementView Grid.Column="3" Icon="🌡️" Value="{Binding Temperature, Mode=OneWay}" Unit="°C" x:Uid="Temperature" ToolTipService.ToolTip="Temperature" Style="{StaticResource MeasureStyleLast}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=Page, Path=IsCelsius, Converter={StaticResource BooleanToVisibility}}"/>
-                                <fs:MeasurementView Grid.Column="3" Icon="🌡️" Value="{Binding Fahrenheit, Mode=OneWay}" Unit="°F" x:Uid="Temperature" ToolTipService.ToolTip="Temperature" Style="{StaticResource MeasureStyleLast}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=Page, Path=IsCelsius, Converter={StaticResource BooleanToVisibility}, ConverterParameter=Reverse}"/>
-                            </Grid>
-                        </RelativePanel>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <fs:MeasurementView Grid.Column="0" Icon="💦" Value="{Binding Moisture, Mode=OneWay}" Unit="%" x:Uid="Moisture" ToolTipService.ToolTip="Moisture" Style="{StaticResource MeasureStyle}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"/>
+                                    <fs:MeasurementView Grid.Column="1" Icon="🐇" Value="{Binding Fertility, Mode=OneWay}" Unit=" µS/cm" x:Uid="Fertility" ToolTipService.ToolTip="Fertility" Style="{StaticResource MeasureStyle}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"/>
+                                    <fs:MeasurementView Grid.Column="2" Icon="☀️" Value="{Binding Brightness, Mode=OneWay}" Unit=" lux" x:Uid="Brightness" ToolTipService.ToolTip="Brightness" Style="{StaticResource MeasureStyle}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}"/>
+                                    <fs:MeasurementView Grid.Column="3" Icon="🌡️" Value="{Binding Temperature, Mode=OneWay}" Unit="°C" x:Uid="Temperature" ToolTipService.ToolTip="Temperature" Style="{StaticResource MeasureStyleLast}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FloraMain, Path=IsCelsius, Converter={StaticResource BooleanToVisibility}}"/>
+                                    <fs:MeasurementView Grid.Column="3" Icon="🌡️" Value="{Binding Fahrenheit, Mode=OneWay}" Unit="°F" x:Uid="Temperature" ToolTipService.ToolTip="Temperature" Style="{StaticResource MeasureStyleLast}" Foreground="{Binding ElementName=FloraMain, Path=TextColor}" Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, ElementName=FloraMain, Path=IsCelsius, Converter={StaticResource BooleanToVisibility}, ConverterParameter=Reverse}"/>
+                                </Grid>
+                            </RelativePanel>
+                        </Grid>
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
-
         </ScrollViewer>
+
+        <Grid x:Name="DebugGrid" Grid.Row="0" Background="#E5FFFFFF" Visibility="Collapsed">
+            <TextBlock x:Name="DebugLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        </Grid>
+
         <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
         <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
             <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
+            <AppBarButton Icon="Setting" x:Uid="Schedule" Label="Schedule BG task" x:Name="TestButton" Click="TestButton_OnClick" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}" />
         </CommandBar>
     </Grid>
 </Page>
