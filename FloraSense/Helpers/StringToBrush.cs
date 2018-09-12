@@ -9,7 +9,7 @@ namespace FloraSense
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var theme = Extensions.Themes.FirstOrDefault(t => t.Name == (string)value) ?? Extensions.Themes.First();
+            var theme = Helpers.Helpers.Themes.FirstOrDefault(t => t.Name == (string)value) ?? Helpers.Helpers.Themes.First();
             var param = (string) parameter ?? string.Empty;
             return param.Equals("Text") ? theme.TextColor : theme.Brush;
         }

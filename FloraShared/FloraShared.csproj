@@ -109,6 +109,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveData.cs" />
+    <Compile Include="SensorDataCollection.cs" />
     <Compile Include="SensorDataModel.cs" />
     <EmbeddedResource Include="Properties\FloraShared.rd.xml" />
   </ItemGroup>

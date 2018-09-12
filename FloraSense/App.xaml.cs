@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Services.Store;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace FloraSense
@@ -22,15 +15,38 @@ namespace FloraSense
     /// </summary>
     sealed partial class App : Application
     {
+        public const string FloraSenseAdFree = "FloraSenseAdFree";
+        public bool FloraSenseAdFreePurchased => _userCollection?.ContainsKey(FloraSenseAdFree) ?? false;
+        public StoreContext StoreContext { get; private set; }
+
+        private IReadOnlyDictionary<string, StoreProduct> _userCollection;
+        private readonly List<string> _productKinds = new List<string> {"Durable"};
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
+            UpdatePurchasesInfo();
         }
+
+        public async Task UpdatePurchasesInfo()
+        {
+            if (StoreContext == null)
+                StoreContext = StoreContext.GetDefault();
+            
+            var queryResult = await StoreContext.GetUserCollectionAsync(_productKinds);
+            _userCollection = queryResult.Products;
+
+            if (queryResult.ExtendedError != null)
+            {
+                return;
+            }
+        }
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

@@ -115,6 +115,16 @@
       <Version>6.1.7</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MiFloraReader\MiFloraReader\MiFloraReader.csproj">
+      <Project>{0e196cf1-99bd-4ab8-9a53-f783dd2ee1ff}</Project>
+      <Name>MiFloraReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FloraShared\FloraShared.csproj">
+      <Project>{ffefa8af-0931-4a3d-8596-1eec7654025e}</Project>
+      <Name>FloraShared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

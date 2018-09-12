@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FloraSense</RootNamespace>
     <AssemblyName>FloraSense</AssemblyName>
-    <DefaultLanguage>ru-RU</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
@@ -25,6 +25,7 @@
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
+    <AppxPackageDir>C:\Reps\FloraSense\FloraSense\AppPackages</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -105,6 +106,7 @@
     <Compile Include="Controls\MeasurementView.xaml.cs">
       <DependentUpon>MeasurementView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BgTaskHelper.cs" />
     <Compile Include="Models\Plant.cs" />
     <Compile Include="Data\Theme.cs" />
     <Compile Include="Data\ThemeCollection.cs" />
@@ -126,15 +128,13 @@
     <Compile Include="Controls\PinControl.xaml.cs">
       <DependentUpon>PinControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\SampleData.cs" />
-    <Compile Include="Helpers\SaveData.cs" />
-    <Compile Include="Data\SensorDataCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -192,6 +192,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <None Include="Strings\en-US\Package.StoreAssociation.xml" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
