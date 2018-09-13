@@ -15,14 +15,8 @@ namespace FloraSense
     /// </summary>
     sealed partial class App : Application
     {
-        public const string FloraSenseAdFree =
-#if DEBUG
-            "9N8RXLQ01MM1";
-#else
-            "9NGBX22P9BVH";
-#endif
+        public const string FloraSenseAdFree = "9NGBX22P9BVH";
         
-        private bool _floraSenseAdFreePurchased;
         public bool FloraSenseAdFreePurchased => _userCollection?.ContainsKey(FloraSenseAdFree) ?? false;
 
         public StoreContext StoreContext { get; private set; }
@@ -38,7 +32,6 @@ namespace FloraSense
         {
             InitializeComponent();
             Suspending += OnSuspending;
-            UpdatePurchasesInfo();
         }
 
         public async Task UpdatePurchasesInfo()

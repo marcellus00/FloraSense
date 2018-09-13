@@ -43,7 +43,7 @@
         </ComboBox>
         <StackPanel Name="InApps" Width="300">
             <TextBlock x:Uid="Support" TextWrapping="WrapWholeWords" HorizontalAlignment="Stretch"
-                       Text="You can support the developer by clicking the button below. This donation will provide help to improve and support this application but will also disable ads in the plant list." />
+                       Text="If you like this app you can support it's further development by buying the ad removal feature." />
             <Button x:Uid="RemoveAds" Name="RemoveAds" Content="Remove ads" Click="RemoveAdsButton_Click" HorizontalAlignment="Stretch"/>
         </StackPanel>
     </StackPanel>

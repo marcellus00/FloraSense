@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FloraSense"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Title="Edit plant details"
@@ -13,20 +13,40 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_SaveButtonClick"
     SecondaryButtonClick="ContentDialog_CancelButtonClick"
-    DefaultButton="Primary">
+    DefaultButton="Primary"
+    d:DesignHeight="600">
 
     <StackPanel>
         <TextBox x:Uid="PlantName" x:Name="PlantName" Header="Plant name" Text="{x:Bind Model.Name, Mode=OneTime}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
-        <TextBox x:Uid="SensorMac" x:Name="SensorMac" Header="Sensor MAC" Text="{x:Bind Model.DeviceId, Mode=OneTime, Converter={StaticResource MacConverter}}" IsEnabled="False"/>
-        <TextBox x:Uid="SensorBattery" x:Name="SensorBattery" Header="Battery" Text="{x:Bind Model.Battery, Mode=OneTime, Converter={StaticResource PercentFormatter}}" IsEnabled="False"/>
-        <TextBox x:Uid="Firmware" x:Name="Firmware" Header="Firmware" Text="{x:Bind Model.Firmware, Mode=OneTime}" IsEnabled="False"/>
-        <!--<TextBlock Text="Recommended moisture" />
+        <TextBlock Text="Recommended moisture" />
         <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
         <TextBlock Text="Recommended fertility" />
         <controls:RangeSelector Minimum="0" Maximum="9000" StepFrequency="1"/>
         <TextBlock Text="Recommended brightness" />
         <controls:RangeSelector Minimum="0" Maximum="60000" StepFrequency="1"/>
         <TextBlock Text="Recommended temperature" />
-        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>-->
+        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Sensor MAC" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Bind Model.DeviceId, Mode=OneTime, Converter={StaticResource MacConverter}}" />
+            
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Battery" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="1"  Grid.Column="1" Text="{x:Bind Model.Battery, Mode=OneTime, Converter={StaticResource PercentFormatter}}" IsEnabled="False"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Firmware" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2"  Grid.Column="1" Text="{x:Bind Model.Firmware, Mode=OneTime}" IsEnabled="False"/>
+        </Grid>
+
+        
     </StackPanel>
 </ContentDialog>
