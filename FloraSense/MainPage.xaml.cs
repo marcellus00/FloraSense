@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define PLANT_LIST_BANNER
+//#define NATIVE_AD
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -14,7 +16,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using FloraSense.Annotations;
 using FloraSense.Helpers;
-using Microsoft.Advertising;
 using Microsoft.Advertising.WinRT.UI;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using MiFlora;
@@ -25,20 +26,22 @@ namespace FloraSense
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
         public const string AppId = "9NP89FZM6N5F";
-        public const string AdId = "1100029460";
+        public const string AdIdRegular = "1100028866";
+        public const string AdIdNative = "1100029460";
 
         private readonly MiFloraReader _reader;
+        private readonly SettingsModel _settings;
+
         private readonly SensorDataModel _adModel;
+#if PLANT_LIST_BANNER
         private readonly DataTemplate _adTemplate;
         private readonly ControlTemplate _blankTemplate;
-        private readonly SettingsModel _settings;
-        private readonly NativeAdsManagerV2 _nativeAdsManager;
-
         private GridViewItem _adItem;
-
+#endif
+        
         private bool IsBusy => ProgressBar.Visibility == Visibility.Visible;
         private bool IsMobile => Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile";
-        private App App => (App) Application.Current;
+        private App App { get; } = (App) Application.Current;
 
         public bool Debug { get; } =
 #if DEBUG
@@ -51,7 +54,60 @@ namespace FloraSense
         public bool IsCelsius => _settings.TempUnits == SettingsModel.Units.C;
         public string ThemeName => _settings.ThemeName ?? Helpers.Helpers.Themes.First().Name;
         public Brush TextColor => Helpers.Helpers.GetTheme(ThemeName).TextColor;
-        
+
+        #region Properties
+
+        private double _screenWidth;
+        private double _screenHeight;
+        private bool _hasNativeAd;
+        private bool _hasRegularAd;
+        private bool _hasSensors;
+#if NATIVE_AD
+        private NativeAdsManagerV2 _nativeAdsManager;
+#endif
+
+        public bool HasNativeAd
+        {
+            get => !App.FloraSenseAdFreePurchased && _hasNativeAd;
+            private set
+            {
+                _hasNativeAd = value;
+                UpdateAdVisibility();
+            }
+        }
+
+        public bool HasRegularAd
+        {
+            get => !App.FloraSenseAdFreePurchased && _hasRegularAd;
+            private set
+            {
+                _hasRegularAd = value;
+                UpdateAdVisibility();
+            }
+        }
+
+        public double ScreenWidth
+        {
+            get => _screenWidth;
+            set
+            {
+                _screenWidth = value;
+                OnPropertyChanged(nameof(ScreenWidth));
+            }
+        }
+
+        public double ScreenHeight
+        {
+            get => _screenHeight;
+            set
+            {
+                _screenHeight = value;
+                OnPropertyChanged(nameof(ScreenHeight));
+            }
+        }
+
+#endregion
+
         public MainPage()
         {
             _settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
@@ -60,97 +116,19 @@ namespace FloraSense
             Loaded += OnLoaded;
             InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
-
-            _nativeAdsManager = new NativeAdsManagerV2(AppId, AdId);
-            _nativeAdsManager.AdReady += MyNativeAd_AdReady;
-            _nativeAdsManager.ErrorOccurred += MyNativeAdsManager_ErrorOccurred;
-
+            
             _reader = new MiFloraReader();
+
+            var knownDevices = SaveData.Load<SensorDataCollection>();
+            knownDevices?.RemoveInvalid();
+            KnownDevices = knownDevices ?? new SensorDataCollection();
+
+#if PLANT_LIST_BANNER
             _adModel = new SensorDataModel {Known = true};
             _adTemplate = (DataTemplate) Resources["AdTemplate"];
             _blankTemplate = (ControlTemplate) Resources["BlankTemplate"];
-
-            KnownDevices = SaveData.Load<SensorDataCollection>() ?? new SensorDataCollection();
+#endif
             KnownDevices.Add(_adModel);
-        }
-
-        private void MyNativeAd_AdReady(object sender, NativeAdReadyEventArgs e)
-        {
-            NativeAdV2 nativeAd = e.NativeAd;
-
-            // Show the ad icon.
-            if (nativeAd.AdIcon != null)
-            {
-                AdIconImage.Source = nativeAd.AdIcon.Source;
-
-                // Adjust the Image control to the height and width of the 
-                // provided ad icon.
-                AdIconImage.Height = nativeAd.AdIcon.Height;
-                AdIconImage.Width = nativeAd.AdIcon.Width;
-            }
-
-            // Show the ad title.
-            TitleTextBlock.Text = nativeAd.Title;
-
-            // Show the ad description.
-            if (!string.IsNullOrEmpty(nativeAd.Description))
-            {
-                DescriptionTextBlock.Text = nativeAd.Description;
-                DescriptionTextBlock.Visibility = Visibility.Visible;
-            }
-
-            // Display the first main image for the ad. Note that the service
-            // might provide multiple main images. 
-            if (nativeAd.MainImages.Count > 0)
-            {
-                NativeImage mainImage = nativeAd.MainImages[0];
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.UriSource = new Uri(mainImage.Url);
-                MainImageImage.Source = bitmapImage;
-
-                // Adjust the Image control to the height and width of the 
-                // main image.
-                MainImageImage.Height = mainImage.Height;
-                MainImageImage.Width = mainImage.Width;
-                MainImageImage.Visibility = Visibility.Visible;
-            }
-
-            // Add the call to action string to the button.
-            if (!string.IsNullOrEmpty(nativeAd.CallToActionText))
-            {
-                CallToActionButton.Content = nativeAd.CallToActionText;
-                CallToActionButton.Visibility = Visibility.Visible;
-            }
-
-            // Show the ad sponsored by value.
-            if (!string.IsNullOrEmpty(nativeAd.SponsoredBy))
-            {
-                SponsoredByTextBlock.Text = nativeAd.SponsoredBy;
-                SponsoredByTextBlock.Visibility = Visibility.Visible;
-            }
-
-            // Show the icon image for the ad.
-            if (nativeAd.IconImage != null)
-            {
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.UriSource = new Uri(nativeAd.IconImage.Url);
-                IconImageImage.Source = bitmapImage;
-
-                // Adjust the Image control to the height and width of the 
-                // icon image.
-                IconImageImage.Height = nativeAd.IconImage.Height;
-                IconImageImage.Width = nativeAd.IconImage.Width;
-                IconImageImage.Visibility = Visibility.Visible;
-            }
-
-            // Register the container of the controls that display
-            // the native ad elements for clicks/impressions.
-            nativeAd.RegisterAdContainer(NativeAdContainer);
-        }
-
-        private void MyNativeAdsManager_ErrorOccurred(object sender, NativeAdErrorEventArgs e)
-        {
-            LogDebug($"NativeAd error {e.ErrorMessage} ErrorCode: {e.ErrorCode.ToString()}");
         }
 
         private void MainPage_OnKeyDown(object sender, KeyRoutedEventArgs e)
@@ -160,19 +138,30 @@ namespace FloraSense
                 DebugGrid.Toggle();
 #endif
         }
-
+        
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             if (_settings.BgUpdate && !BgTaskHelper.TaskRegistered)
                 await BgTaskHelper.RegisterTask(_settings.BgUpdateRate);
 
-            var container = DataGridView.ContainerFromItem(_adModel);
-            _adItem = container as GridViewItem;
-            _adItem.ContentTemplate = _adTemplate;
-            _adItem.Template = _blankTemplate;
-            _adItem.IsTabStop = false;
-            _adItem.IsHitTestVisible = false;
-            _adItem.Show(false);
+            if (!App.FloraSenseAdFreePurchased)
+            {
+#if PLANT_LIST_BANNER
+                var container = DataGridView.ContainerFromItem(_adModel);
+                _adItem = container as GridViewItem;
+                _adItem.ContentTemplate = _adTemplate;
+                _adItem.Template = _blankTemplate;
+                _adItem.IsTabStop = false;
+                _adItem.IsHitTestVisible = false;
+#endif
+
+#if NATIVE_AD
+                _nativeAdsManager = new NativeAdsManagerV2(AppId, AdIdNative);
+                _nativeAdsManager.AdReady += MyNativeAd_AdReady;
+                _nativeAdsManager.ErrorOccurred += MyNativeAdsManager_ErrorOccurred;
+                _nativeAdsManager.RequestAd();
+#endif
+            }
 
             CheckList();
             if (_settings.PollOnStart)
@@ -183,23 +172,19 @@ namespace FloraSense
         {
             if (IsBusy) return;
             KnownDevices.Remove(_adModel);
+            KnownDevices.RemoveInvalid();
             SaveData.Save(KnownDevices);
         }
 
         private void CheckList()
         {
-            var anySensors = KnownDevices.Any(model => model != _adModel);
-            var adsRemoved = App.FloraSenseAdFreePurchased;
-            RefreshButton.IsEnabled = anySensors;
-            WelcomeTip.Show(!anySensors);
-            var ads = !adsRemoved && anySensors;
-            _adItem.Show(ads);
-
-            if(ads)
-                _nativeAdsManager.RequestAd();
+            _hasSensors = KnownDevices.Any(model => model != _adModel);
+            RefreshButton.IsEnabled = _hasSensors;
+            WelcomeTip.Show(!_hasSensors);
+            _adItem?.Show(_hasSensors);
         }
 
-        private async void OnSensorDataRecieved(SensorData sensorData)
+        private async void OnSensorDataReceived(SensorData sensorData)
         {
             await RunAsync(() =>
             {
@@ -236,6 +221,9 @@ namespace FloraSense
             if (!await CheckBluetooth())
                 return;
 
+#if ENUMERATE_ON_REFRESH
+            _reader.StartDeviceWatcher();
+#endif
             foreach (var model in KnownDevices.ToList())
             {
                 if (!model.IsValid) continue;
@@ -247,6 +235,9 @@ namespace FloraSense
                 else
                     model.LastUpdate = data.ErrorDetails;
             }
+#if ENUMERATE_ON_REFRESH
+            _reader.StopDeviceWatcher();
+#endif
 
             ToggleButtons(true);
         }
@@ -285,7 +276,6 @@ namespace FloraSense
 
             FinishButton.Show(true);
             WelcomeTip.Show(false);
-            //_adItem.Show(false);
 
             EnumerateDevices();
         }
@@ -311,7 +301,7 @@ namespace FloraSense
 
         private void EnumerateDevices()
         {
-            _reader.OnSensorDataRecieved += OnSensorDataRecieved;
+            _reader.OnSensorDataRecieved += OnSensorDataReceived;
             _reader.OnEnumerationCompleted += OnEnumerationCompleted;
             _reader.StartDeviceWatcher();
         }
@@ -331,8 +321,10 @@ namespace FloraSense
         {
             _settings.BgUpdate = BgTaskHelper.TaskRegistered;
             var settingsDialog = new SettingsDialog(_settings, LogDebug);
+            settingsDialog.OnRemoveAds += UpdateAdVisibility;
             var result = await settingsDialog.ShowAsync();
-
+            UpdateAdVisibility();
+            
             if (result != ContentDialogResult.Primary) return;
             SaveData.Save(_settings);
             OnPropertyChanged(nameof(IsCelsius));
@@ -343,6 +335,12 @@ namespace FloraSense
             BgTaskHelper.UnregisterTask();
             if (!_settings.BgUpdate) return;
             _settings.BgUpdate = await BgTaskHelper.RegisterTask(_settings.BgUpdateRate);
+        }
+
+        private void UpdateAdVisibility()
+        {
+            OnPropertyChanged(nameof(HasNativeAd));
+            OnPropertyChanged(nameof(HasRegularAd));
         }
 
         private void LogDebug(string log)
@@ -414,19 +412,21 @@ namespace FloraSense
                 RemoveMockButton_OnClick(sender, e);
         }
 
-        private void AdControl_OnAdRefreshed(object sender, RoutedEventArgs e)
-        {
-#if DEBUG
-            var ad = sender as AdControl;
-            LogDebug($"[R] {ad.AdUnitId} {ad.HasAd}");
-#endif
-        }
-
         private void AdControl_OnErrorOccurred(object sender, AdErrorEventArgs e)
         {
+            _hasRegularAd = false;
 #if DEBUG
             var ad = sender as AdControl;
             LogDebug($"[E] {ad.AdUnitId} {e.ErrorCode} {e.ErrorMessage}");
+#endif
+        }
+
+        private void AdControl_OnAdRefreshed(object sender, RoutedEventArgs e)
+        {
+            _hasRegularAd = true;
+#if DEBUG
+            var ad = sender as AdControl;
+            LogDebug($"[S] {ad.AdUnitId} {ad.HasAd} {ad.IsAutoRefreshEnabled}");
 #endif
         }
 
@@ -444,6 +444,73 @@ namespace FloraSense
         private void CancelTestButton_OnClick(object sender, RoutedEventArgs e)
         {
             BgTaskHelper.UnregisterTask();
+        }
+
+        private void MyNativeAd_AdReady(object sender, NativeAdReadyEventArgs e)
+        {
+            HasNativeAd = true;
+
+            var nativeAd = e.NativeAd;
+
+            // Show the ad icon.
+            if (nativeAd.AdIcon != null)
+            {
+                AdIconImage.Source = nativeAd.AdIcon.Source;
+
+                // Adjust the Image control to the height and width of the 
+                // provided ad icon.
+                AdIconImage.Height = nativeAd.AdIcon.Height;
+                AdIconImage.Width = nativeAd.AdIcon.Width;
+            }
+
+            // Show the ad title.
+            TitleTextBlock.Text = nativeAd.Title;
+
+            // Display the first main image for the ad. Note that the service
+            // might provide multiple main images. 
+            if (nativeAd.MainImages.Count > 0)
+            {
+                var mainImage = nativeAd.MainImages[0];
+                var bitmapImage = new BitmapImage {UriSource = new Uri(mainImage.Url)};
+                MainImageImage.Source = bitmapImage;
+
+                // Adjust the Image control to the height and width of the 
+                // main image.
+                MainImageImage.Height = mainImage.Height;
+                MainImageImage.Width = mainImage.Width;
+                MainImageImage.Visibility = Visibility.Visible;
+            }
+
+            // Register the container of the controls that display
+            // the native ad elements for clicks/impressions.
+            nativeAd.RegisterAdContainer(NativeAdContainer);
+        }
+
+        private void MyNativeAdsManager_ErrorOccurred(object sender, NativeAdErrorEventArgs e)
+        {
+            HasNativeAd = false;
+            LogDebug($"NativeAd error {e.ErrorMessage} ErrorCode: {e.ErrorCode.ToString()}");
+        }
+
+        private void MainPage_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ScreenHeight = ActualHeight;
+            ScreenWidth = ActualWidth;
+        }
+
+        private void RequestAd_OnClick(object sender, RoutedEventArgs e)
+        {
+#if NATIVE_AD
+            var visible = NativeAdContainer.Visibility == Visibility.Visible;
+            NativeAdContainer.Show(!visible);
+            if (visible)
+                _nativeAdsManager?.RequestAd();
+#endif
+        }
+
+        private void ToggleRegularAd_OnClick(object sender, RoutedEventArgs e)
+        {
+            _adItem?.Show(_adItem?.Visibility != Visibility.Visible);
         }
     }
 }

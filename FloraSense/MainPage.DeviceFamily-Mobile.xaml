@@ -11,7 +11,6 @@
     d:DesignWidth="500"
     d:DesignHeight="500"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <!--Background="{ThemeResource SystemControlAcrylicWindowBrush}"-->
 
     <Page.Resources>
         <ResourceDictionary>
@@ -24,12 +23,15 @@
                 <Setter Property="Margin" Value="0,0,5,0"/>
             </Style>
             <DataTemplate x:Key="AdTemplate">
-                <Viewbox Width="1000">
+                <Viewbox VerticalAlignment="Top">
                     <ui:AdControl
-                        ApplicationId="9np89fzm6n5f"
+                        ApplicationId="9NP89FZM6N5F"
                         AdUnitId="1100028866"
                         Width="320"
-                        Height="50"/>
+                        Height="50"
+                        Visibility="{Binding HasRegularAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}"
+                        ErrorOccurred="AdControl_OnErrorOccurred"
+                        AdRefreshed="AdControl_OnAdRefreshed"/>
                 </Viewbox>
             </DataTemplate>
             <ControlTemplate TargetType="GridViewItem" x:Key="BlankTemplate">
@@ -84,9 +86,6 @@
                                     <Run FontFamily="Segoe MDL2 Assets" Text=" &#xE72C;" FontSize="10"/>
                                 </TextBlock>
                             </StackPanel>
-                            <!--
-                            
-                            -->
                             <Grid Margin="5,10,10,10" x:Name="MeasurementsGrid"
                                 RelativePanel.Below="PlantName"
                                 RelativePanel.AlignLeftWithPanel="True" 
@@ -114,17 +113,28 @@
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
-
         </ScrollViewer>
+
+        <Grid x:Name="DebugGrid" Grid.Row="0" Background="#E5FFFFFF" Visibility="Collapsed">
+            <TextBlock x:Name="DebugLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        </Grid>
+
         <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
         <CommandBar Grid.Row="2" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
             <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
-            <AppBarButton Icon="Setting" x:Uid="AddMock" Label="Add mock" x:Name="AddMockButton" Click="AddMockButton_OnClick" Visibility="{Binding Debug, Mode=OneWay, Converter={StaticResource BooleanToVisibility}}" />
-            <AppBarButton Icon="Setting" x:Uid="RemoveMock" Label="Remove mock" x:Name="RemoveMockButton" Click="RemoveMockButton_OnClick" Visibility="{Binding Debug, Mode=OneWay, Converter={StaticResource BooleanToVisibility}}" />
-            <AppBarButton Icon="Setting" x:Uid="Clear" Label="Clear" x:Name="ClearButton" Click="ClearButton_OnClick" Visibility="{Binding Debug, Mode=OneWay, Converter={StaticResource BooleanToVisibility}}" />
+            <AppBarButton Icon="Setting" Label="Debug" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Schedule BG task" Click="TestButton_OnClick" />
+                        <MenuFlyoutItem Text="Cancel BG task" Click="CancelTestButton_OnClick"/>
+                        <MenuFlyoutItem Text="Toggle regular ad" Click="ToggleRegularAd_OnClick"/>
+                        <MenuFlyoutItem Text="Toggle native ad" Click="RequestAd_OnClick"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
         </CommandBar>
     </Grid>
 </Page>

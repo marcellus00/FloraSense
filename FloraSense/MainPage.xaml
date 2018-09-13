@@ -10,9 +10,10 @@
     mc:Ignorable="d"
     d:DesignWidth="480"
     d:DesignHeight="500"
-    Background="{ThemeResource SystemControlAcrylicWindowBrush}"
+    Background="{ThemeResource SystemControlAcrylicElementBrush}"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
-    KeyDown="MainPage_OnKeyDown">
+    KeyDown="MainPage_OnKeyDown"
+    SizeChanged="MainPage_OnSizeChanged">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -25,16 +26,15 @@
                 <Setter Property="Margin" Value="0,0,5,0"/>
             </Style>
             <DataTemplate x:Key="AdTemplate">
-                <Viewbox Width="490">
-                    <Grid>
-                        <ui:AdControl
-                            ApplicationId="9NP89FZM6N5F"
-                            AdUnitId="1100029460"
-                            Width="640"
-                            Height="100"
-                            Visibility="{Binding HasNativeAds, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}"
-                            AdRefreshed="AdControl_OnAdRefreshed" ErrorOccurred="AdControl_OnErrorOccurred"/>
-                    </Grid>
+                <Viewbox VerticalAlignment="Top">
+                    <ui:AdControl
+                        ApplicationId="9NP89FZM6N5F"
+                        AdUnitId="1100028866"
+                        Width="320"
+                        Height="50"
+                        Visibility="{Binding HasRegularAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}"
+                        ErrorOccurred="AdControl_OnErrorOccurred"
+                        AdRefreshed="AdControl_OnAdRefreshed"/>
                 </Viewbox>
             </DataTemplate>
             <ControlTemplate TargetType="GridViewItem" x:Key="BlankTemplate">
@@ -126,36 +126,32 @@
         </Grid>
 
         <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
-        <StackPanel Grid.Row="2" x:Name="NativeAdContainer" Background="#555555" Width="Auto" Height="Auto"
-                    Orientation="Vertical">
-            <Image x:Name="AdIconImage" HorizontalAlignment="Left" VerticalAlignment="Center"
-                   Margin="20,20,20,20"/>
-            <TextBlock x:Name="TitleTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Text="The ad title will go here" FontSize="24" Foreground="White" Margin="20,0,0,10"/>
-            <TextBlock x:Name="DescriptionTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Foreground="White" TextWrapping="Wrap" Text="The ad description will go here"
-                       Margin="20,0,0,0" Visibility="Collapsed"/>
-            <Image x:Name="MainImageImage" HorizontalAlignment="Left"
-                   VerticalAlignment="Center" Margin="20,20,20,20" Visibility="Collapsed"/>
-            <Button x:Name="CallToActionButton" Background="Gray" Foreground="White"
-                    HorizontalAlignment="Left" VerticalAlignment="Center" Width="Auto" Height="Auto"
-                    Content="The call to action text will go here" Margin="20,20,20,20"
-                    Visibility="Collapsed"/>
-            <StackPanel x:Name="SponsoredByStackPanel" Orientation="Horizontal" Margin="20,20,20,20">
-                <TextBlock x:Name="SponsoredByTextBlock" Text="The ad sponsored by text will go here"
-                           FontSize="24" Foreground="White" Margin="20,0,0,0" HorizontalAlignment="Left"
-                           VerticalAlignment="Center" Visibility="Collapsed"/>
-                <Image x:Name="IconImageImage" Margin="40,20,20,20" HorizontalAlignment="Left"
-                       VerticalAlignment="Center" Visibility="Collapsed"/>
+
+        <StackPanel Grid.Row="2" x:Name="NativeAdContainer" Background="#555555"
+                    Width="{Binding ScreenWidth, Mode=OneWay}" Height="100" Orientation="Vertical"
+                    Visibility="{Binding HasNativeAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}" Margin="5,5,5,5">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="AdIconImage" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock x:Name="TitleTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center"
+                       Text="The ad title will go here" FontSize="20" Foreground="White"/>
             </StackPanel>
+            <Image x:Name="MainImageImage" VerticalAlignment="Top" Visibility="Collapsed" Width="{Binding ScreenWidth, Mode=OneWay}"/>
         </StackPanel>
         <CommandBar Grid.Row="3" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
             <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
-            <AppBarButton Icon="Setting" x:Uid="Schedule" Label="Schedule BG task" x:Name="TestButton" Click="TestButton_OnClick" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}" />
-            <AppBarButton Icon="Setting" x:Uid="Schedule" Label="Cancel BG task" x:Name="CancelTestButton" Click="CancelTestButton_OnClick" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}" />
+            <AppBarButton Icon="Setting" Label="Debug" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Schedule BG task" Click="TestButton_OnClick" />
+                        <MenuFlyoutItem Text="Cancel BG task" Click="CancelTestButton_OnClick"/>
+                        <MenuFlyoutItem Text="Toggle regular ad" Click="ToggleRegularAd_OnClick"/>
+                        <MenuFlyoutItem Text="Toggle native ad" Click="RequestAd_OnClick"/>
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
         </CommandBar>
     </Grid>
 </Page>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Windows.ApplicationModel.Store;
-using Windows.Services.Store;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using FloraSense.Helpers;
@@ -14,9 +10,12 @@ namespace FloraSense
     public sealed partial class SettingsDialog : ContentDialog
     {
         private readonly SettingsModel _model;
-        public SettingsModel Backup { get; }
         private App App => (App)Application.Current;
-        private Action<string> _debugLog;
+        private readonly Action<string> _debugLog;
+        
+        public SettingsModel Backup { get; }
+
+        public Action OnRemoveAds;
 
         public SettingsDialog(SettingsModel model, Action<string> debugLog = null)
         {
@@ -51,10 +50,15 @@ namespace FloraSense
                 extendedError = result.ExtendedError.Message;
 
             _debugLog?.Invoke($"[Purchase] {message} {extendedError}");
-
+            
             await App.UpdatePurchasesInfo();
-            InApps.Show(!App.FloraSenseAdFreePurchased);
-            RemoveAds.IsEnabled = true;
+
+            var ads = !App.FloraSenseAdFreePurchased;
+            RemoveAds.IsEnabled = ads;
+            InApps.Show(ads);
+            if(App.FloraSenseAdFreePurchased)
+                OnRemoveAds?.Invoke();
+            OnRemoveAds = null;
         }
     }
 
