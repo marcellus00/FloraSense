@@ -12,6 +12,11 @@
         <floraSense:StringToTheme x:Key="StringToTheme"/>
         <floraSense:StringToBrush x:Key="StringToBrush"/>
 
+        <LinearGradientBrush x:Key="GardenGreen" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00b09b" Offset="0"/>
+            <GradientStop Color="#96c93d" Offset="1"/>
+        </LinearGradientBrush>
+
         <floraSense:ThemeCollection x:Key="ThemeCollection">
             <floraSense:Theme Name="Garden Green" TextColor="White">
                 <floraSense:Theme.Brush>

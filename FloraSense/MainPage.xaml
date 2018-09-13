@@ -12,8 +12,7 @@
     d:DesignHeight="500"
     Background="{ThemeResource SystemControlAcrylicElementBrush}"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
-    KeyDown="MainPage_OnKeyDown"
-    SizeChanged="MainPage_OnSizeChanged">
+    KeyDown="MainPage_OnKeyDown">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -32,7 +31,6 @@
                         AdUnitId="1100028866"
                         Width="320"
                         Height="50"
-                        Visibility="{Binding HasRegularAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}"
                         ErrorOccurred="AdControl_OnErrorOccurred"
                         AdRefreshed="AdControl_OnAdRefreshed"/>
                 </Viewbox>
@@ -127,16 +125,6 @@
 
         <ProgressBar Grid.Row="1" x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,1,0,2"/>
 
-        <StackPanel Grid.Row="2" x:Name="NativeAdContainer" Background="#555555"
-                    Width="{Binding ScreenWidth, Mode=OneWay}" Height="100" Orientation="Vertical"
-                    Visibility="{Binding HasNativeAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}" Margin="5,5,5,5">
-            <StackPanel Orientation="Horizontal">
-                <Image x:Name="AdIconImage" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock x:Name="TitleTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Text="The ad title will go here" FontSize="20" Foreground="White"/>
-            </StackPanel>
-            <Image x:Name="MainImageImage" VerticalAlignment="Top" Visibility="Collapsed" Width="{Binding ScreenWidth, Mode=OneWay}"/>
-        </StackPanel>
         <CommandBar Grid.Row="3" DefaultLabelPosition="Right">
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
@@ -148,7 +136,8 @@
                         <MenuFlyoutItem Text="Schedule BG task" Click="TestButton_OnClick" />
                         <MenuFlyoutItem Text="Cancel BG task" Click="CancelTestButton_OnClick"/>
                         <MenuFlyoutItem Text="Toggle regular ad" Click="ToggleRegularAd_OnClick"/>
-                        <MenuFlyoutItem Text="Toggle native ad" Click="RequestAd_OnClick"/>
+                        <MenuFlyoutItem Text="Add mock sensor" Click="AddMockSensor"/>
+                        <MenuFlyoutItem Text="Remove mock sensor" Click="RemoveMockSensor"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>

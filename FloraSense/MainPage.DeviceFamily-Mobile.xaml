@@ -1,6 +1,6 @@
 ﻿<Page
     x:Class="FloraSense.MainPage"
-    x:Name="Page"
+    x:Name="FloraMain"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -29,7 +29,6 @@
                         AdUnitId="1100028866"
                         Width="320"
                         Height="50"
-                        Visibility="{Binding HasRegularAd, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}"
                         ErrorOccurred="AdControl_OnErrorOccurred"
                         AdRefreshed="AdControl_OnAdRefreshed"/>
                 </Viewbox>
@@ -131,7 +130,8 @@
                         <MenuFlyoutItem Text="Schedule BG task" Click="TestButton_OnClick" />
                         <MenuFlyoutItem Text="Cancel BG task" Click="CancelTestButton_OnClick"/>
                         <MenuFlyoutItem Text="Toggle regular ad" Click="ToggleRegularAd_OnClick"/>
-                        <MenuFlyoutItem Text="Toggle native ad" Click="RequestAd_OnClick"/>
+                        <MenuFlyoutItem Text="Add mock sensor" Click="AddMockSensor"/>
+                        <MenuFlyoutItem Text="Remove mock sensor" Click="RemoveMockSensor"/>
                     </MenuFlyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
