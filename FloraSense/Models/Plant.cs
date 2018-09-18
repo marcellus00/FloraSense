@@ -1,53 +1,24 @@
 ﻿using System;
-using Windows.UI.Xaml;
 
 namespace FloraSense.Data
 {
-    public class Plant : DependencyObject
+    [Serializable]
+    public class Plant
     {
-        public static readonly DependencyProperty NameProperty = DependencyProperty.Register(
-            "Name", typeof(string), typeof(Plant), new PropertyMetadata(default(string)));
+        public string DeviceId { get; set; }
+        public string Name { get; set; }
 
-        public string Name
+        public MinMaxInt MoistureRange { get; set; }
+        public MinMaxInt FertilityRange { get; set; }
+        public MinMaxInt BrightnessRange { get; set; }
+        public MinMaxFloat TemperatureRange { get; set; }
+
+        public Plant()
         {
-            get => (string) GetValue(NameProperty);
-            set => SetValue(NameProperty, value);
-        }
-
-        public static readonly DependencyProperty MoistureRangeProperty = DependencyProperty.Register(
-            "MoistureRange", typeof(Tuple<int,int>), typeof(Plant), new PropertyMetadata(default(Tuple<int,int>)));
-
-        public Tuple<int,int> MoistureRange
-        {
-            get => (Tuple<int,int>) GetValue(MoistureRangeProperty);
-            set => SetValue(MoistureRangeProperty, value);
-        }
-
-        public static readonly DependencyProperty FertilityRangeProperty = DependencyProperty.Register(
-            "FertilityRange", typeof(Tuple<int,int>), typeof(Plant), new PropertyMetadata(default(Tuple<int,int>)));
-
-        public Tuple<int,int> FertilityRange
-        {
-            get => (Tuple<int,int>) GetValue(FertilityRangeProperty);
-            set => SetValue(FertilityRangeProperty, value);
-        }
-
-        public static readonly DependencyProperty BrightnessRangeProperty = DependencyProperty.Register(
-            "BrightnessRange", typeof(Tuple<int,int>), typeof(Plant), new PropertyMetadata(default(Tuple<int,int>)));
-
-        public Tuple<int,int> BrightnessRange
-        {
-            get => (Tuple<int,int>) GetValue(BrightnessRangeProperty);
-            set => SetValue(BrightnessRangeProperty, value);
-        }
-
-        public static readonly DependencyProperty TemperatureRangeProperty = DependencyProperty.Register(
-            "TemperatureRange", typeof(Tuple<float,float>), typeof(Plant), new PropertyMetadata(default(Tuple<float,float>)));
-
-        public Tuple<float,float> TemperatureRange
-        {
-            get => (Tuple<float,float>) GetValue(TemperatureRangeProperty);
-            set => SetValue(TemperatureRangeProperty, value);
+            MoistureRange = new MinMaxInt(0, 100);
+            FertilityRange = new MinMaxInt(0, 9000);
+            BrightnessRange = new MinMaxInt(0, 60000);
+            TemperatureRange = new MinMaxFloat(0f, 100f);
         }
     }
 }

@@ -30,11 +30,26 @@ namespace FloraSense
             set => SetValue(UnitProperty, value);
         }
 
+        public ValueStatus Status
+        {
+            get => (ValueStatus)GetValue(StatusProperty);
+            set => SetValue(StatusProperty, value);
+        }
+
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(string), typeof(MeasurementView), PropertyMetadata.Create("🐇"));
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(string), typeof(MeasurementView), PropertyMetadata.Create("3000"));
         public static readonly DependencyProperty UnitProperty =
             DependencyProperty.Register("Unit", typeof(string), typeof(MeasurementView), PropertyMetadata.Create(" µS/cm"));
+        public static readonly DependencyProperty StatusProperty =
+            DependencyProperty.Register("Status", typeof(ValueStatus), typeof(MeasurementView), PropertyMetadata.Create(default(ValueStatus)));
+
+        public enum ValueStatus
+        {
+            Normal,
+            TooLow,
+            TooHigh
+        }
     }
 }

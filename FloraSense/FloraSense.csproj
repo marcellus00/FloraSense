@@ -103,9 +103,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EmptySpace.xaml.cs">
+      <DependentUpon>EmptySpace.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MeasurementView.xaml.cs">
       <DependentUpon>MeasurementView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\MinMax.cs" />
     <Compile Include="Helpers\BgTaskHelper.cs" />
     <Compile Include="Models\Plant.cs" />
     <Compile Include="Data\Theme.cs" />
@@ -117,7 +121,7 @@
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Dialogs\BoolToYes.cs" />
+    <Compile Include="Converters\BoolToYes.cs" />
     <Compile Include="Helpers\MacConverter.cs" />
     <Compile Include="Helpers\PercentFormatter.cs" />
     <Compile Include="Helpers\StringToBrush.cs" />
@@ -207,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\EmptySpace.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MeasurementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

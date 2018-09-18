@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Windows.Globalization;
+﻿using FloraSense.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FloraSense
 {
@@ -10,6 +11,8 @@ namespace FloraSense
         public string ThemeName { get; set; }
         public bool BgUpdate { get; set; }
         public uint BgUpdateRate { get; set; }
+
+        public List<Plant> Plants { get; set; } = new List<Plant>();
 
         public void Update(SettingsModel model)
         {

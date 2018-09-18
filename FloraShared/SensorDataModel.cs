@@ -19,7 +19,7 @@ namespace FloraSense
         public int Battery { get; set; }
         public string Firmware { get; set; }
         public string LastUpdate { get; set; }
-        
+
         #region ManuallyUpdated
 
         private string _name;

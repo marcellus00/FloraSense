@@ -18,7 +18,7 @@ using FloraSense.Helpers;
 using Microsoft.Advertising.WinRT.UI;
 using Microsoft.Toolkit.Uwp.UI.Extensions;
 using MiFlora;
-using Windows.UI.Xaml.Media.Imaging;
+using FloraSense.Data;
 
 namespace FloraSense
 {
@@ -70,10 +70,6 @@ namespace FloraSense
             var knownDevices = SaveData.Load<SensorDataCollection>();
             knownDevices?.RemoveInvalid();
             KnownDevices = knownDevices ?? new SensorDataCollection();
-            foreach (var sensorDataModel in new SampleData().KnownDevices)
-            {
-                KnownDevices.Add(sensorDataModel);
-            }
 
 #if PLANT_LIST_BANNER
             _adModel = new SensorDataModel {Known = true};
@@ -120,6 +116,7 @@ namespace FloraSense
             KnownDevices.Remove(_adModel);
             KnownDevices.RemoveInvalid();
             SaveData.Save(KnownDevices);
+            SaveData.Save(_settings);
         }
 
         private async void CheckList(bool updatePurchases = false)
@@ -137,13 +134,17 @@ namespace FloraSense
             await RunAsync(() =>
             {
                 var sensorDevice = KnownDevices.FirstOrDefault(data => data.DeviceId == sensorData.DeviceId);
+                Plant plant = null;
                 if (sensorDevice == null)
                 {
                     sensorDevice = new SensorDataModel();
                     KnownDevices_Add(sensorDevice);
+                    plant = _settings.Plants.FirstOrDefault(p => p.DeviceId == sensorData.DeviceId);
                 }
 
                 sensorDevice.Update(sensorData);
+                if (plant != null)
+                    sensorDevice.Name = plant.Name;
             });
         }
 
@@ -293,7 +294,6 @@ namespace FloraSense
         private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)
         {
             if (IsBusy) return;
-            var editDialog = new EditPlantDialog();
             var item = e.ClickedItem as SensorDataModel;
             if (item == _adModel) return;
             if (!item.IsValid)
@@ -301,8 +301,15 @@ namespace FloraSense
                 KnownDevices.Remove(item);
                 return;
             }
+            
+            var plant = _settings.Plants?.FirstOrDefault(p => p.DeviceId == item.DeviceId);
+            if (plant == null)
+            {
+                plant = new Plant {DeviceId = item.DeviceId};
+                _settings.Plants?.Add(plant);
+            }
 
-            editDialog.Model = item;
+            var editDialog = new EditPlantDialog(item, plant);
             await editDialog.ShowAsync();
         }
 

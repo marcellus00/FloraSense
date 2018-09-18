@@ -1,12 +1,14 @@
 ﻿<ContentDialog
     x:Class="FloraSense.EditPlantDialog"
     x:Uid="EditDialog"
+    x:Name="PlantEdit"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FloraSense"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:fc="using:FloraSense.Controls"
     mc:Ignorable="d"
     Title="Edit plant details"
     PrimaryButtonText="Save"
@@ -15,17 +17,37 @@
     SecondaryButtonClick="ContentDialog_CancelButtonClick"
     DefaultButton="Primary"
     d:DesignHeight="600">
+    <ContentDialog.Resources>
+        <ResourceDictionary>
+            <Style TargetType="fc:EmptySpace">
+                <Setter Property="Height" Value="10" />
+            </Style>
+        </ResourceDictionary>
+    </ContentDialog.Resources>
 
     <StackPanel>
         <TextBox x:Uid="PlantName" x:Name="PlantName" Header="Plant name" Text="{x:Bind Model.Name, Mode=OneTime}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
+        <fc:EmptySpace />
         <TextBlock Text="Recommended moisture" />
-        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
+        <controls:RangeSelector Name="M" Minimum="0" Maximum="100" StepFrequency="1" 
+                                RangeMin="{x:Bind PlantModel.MoistureRange.Min}"
+                                RangeMax="{x:Bind PlantModel.MoistureRange.Max}"/>
+        <fc:EmptySpace />
         <TextBlock Text="Recommended fertility" />
-        <controls:RangeSelector Minimum="0" Maximum="9000" StepFrequency="1"/>
+        <controls:RangeSelector Name="F" Minimum="0" Maximum="9000" StepFrequency="5" 
+                                RangeMin="{x:Bind PlantModel.FertilityRange.Min}"
+                                RangeMax="{x:Bind PlantModel.FertilityRange.Max}"/>
+        <fc:EmptySpace />
         <TextBlock Text="Recommended brightness" />
-        <controls:RangeSelector Minimum="0" Maximum="60000" StepFrequency="1"/>
+        <controls:RangeSelector Name="B" Minimum="0" Maximum="60000" StepFrequency="10" 
+                                RangeMin="{x:Bind PlantModel.BrightnessRange.Min}"
+                                RangeMax="{x:Bind PlantModel.BrightnessRange.Max}"/>
+        <fc:EmptySpace />
         <TextBlock Text="Recommended temperature" />
-        <controls:RangeSelector Minimum="0" Maximum="100" StepFrequency="1"/>
+        <controls:RangeSelector Name="T" Minimum="0" Maximum="100" StepFrequency="1" 
+                                RangeMin="{x:Bind PlantModel.TemperatureRange.Min}"
+                                RangeMax="{x:Bind PlantModel.TemperatureRange.Max}"/>
+        <fc:EmptySpace Height="20"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -35,16 +57,21 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Sensor MAC" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Bind Model.DeviceId, Mode=OneTime, Converter={StaticResource MacConverter}}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{x:Bind Model.DeviceId, Mode=OneTime, Converter={StaticResource MacConverter}}" IsReadOnly="True" />
             
+            <fc:EmptySpace Grid.Row="1" Grid.ColumnSpan="2"/>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Battery" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="1"  Grid.Column="1" Text="{x:Bind Model.Battery, Mode=OneTime, Converter={StaticResource PercentFormatter}}" IsEnabled="False"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Battery" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="2"  Grid.Column="1" Text="{x:Bind Model.Battery, Mode=OneTime, Converter={StaticResource PercentFormatter}}" IsReadOnly="True" />
+            
+            <fc:EmptySpace Grid.Row="3" Grid.ColumnSpan="2"/>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Firmware" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="2"  Grid.Column="1" Text="{x:Bind Model.Firmware, Mode=OneTime}" IsEnabled="False"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Firmware" VerticalAlignment="Center"/>
+            <TextBox Grid.Row="4"  Grid.Column="1" Text="{x:Bind Model.Firmware, Mode=OneTime}" IsReadOnly="True" />
         </Grid>
 
         
