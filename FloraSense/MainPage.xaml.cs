@@ -28,6 +28,9 @@ namespace FloraSense
         public const string AdIdRegular = "1100028866";
         public const string AdIdNative = "1100029460";
 
+        private const string TooHigh = " ▲";
+        private const string TooLow = " ▼";
+
         private readonly MiFloraReader _reader;
         private readonly SettingsModel _settings;
 
@@ -70,6 +73,11 @@ namespace FloraSense
             var knownDevices = SaveData.Load<SensorDataCollection>();
             knownDevices?.RemoveInvalid();
             KnownDevices = knownDevices ?? new SensorDataCollection();
+
+            foreach (var knownDevice in knownDevices)
+            {
+                CheckValueRanges(knownDevice);
+            }
 
 #if PLANT_LIST_BANNER
             _adModel = new SensorDataModel {Known = true};
@@ -144,10 +152,55 @@ namespace FloraSense
 
                 sensorDevice.Update(sensorData);
                 if (plant != null)
+                {
                     sensorDevice.Name = plant.Name;
+                    CheckValueRanges(sensorDevice, plant);
+                }
             });
         }
 
+        private void CheckValueRanges(SensorDataModel knownDevice)
+        {
+            var plant = _settings.Plants.FirstOrDefault(p => p.DeviceId == knownDevice.DeviceId);
+            CheckValueRanges(knownDevice, plant);
+        }
+
+        private void CheckValueRanges(SensorDataModel model, Plant plant)
+        {
+            if(plant == null)
+                return;
+
+            if (model.Brightness < plant.BrightnessRange.Min)
+                model.BrightnessReport = TooLow;
+            else if (model.Brightness > plant.BrightnessRange.Max)
+                model.BrightnessReport = TooHigh;
+            else
+                model.BrightnessReport = string.Empty;
+
+            if (model.Fertility < plant.FertilityRange.Min)
+                model.FertilityReport = TooLow;
+            else if (model.Fertility > plant.FertilityRange.Max)
+                model.FertilityReport = TooHigh;
+            else
+                model.FertilityReport = string.Empty;
+
+            if (model.Moisture < plant.MoistureRange.Min)
+                model.MoistureReport = TooLow;
+            else if (model.Moisture > plant.MoistureRange.Max)
+                model.MoistureReport = TooHigh;
+            else
+                model.MoistureReport = string.Empty;
+
+            if (model.Temperature < plant.TemperatureRange.Min)
+                model.TemperatureReport = TooLow;
+            else if (model.Temperature > plant.BrightnessRange.Max)
+                model.TemperatureReport = TooHigh;
+            else
+                model.TemperatureReport = string.Empty;
+
+            model.RefreshReports();
+        }
+        
         private void KnownDevices_Add(SensorDataModel model)
         {
             KnownDevices.Insert(KnownDevices.Count - 1, model);
@@ -169,24 +222,20 @@ namespace FloraSense
         {
             if (!await CheckBluetooth())
                 return;
-
-#if ENUMERATE_ON_REFRESH
-            _reader.StartDeviceWatcher();
-#endif
+            
             foreach (var model in KnownDevices.ToList())
             {
                 if (!model.IsValid) continue;
-                var pollTask = MiFloraReader.PollDevice(model.DeviceId);
-                var data = await pollTask;
+                var data = await MiFloraReader.PollDevice(model.DeviceId);
 
                 if (data.Error == SensorData.ErrorType.None)
+                {
                     model.Update(data);
+                    CheckValueRanges(model);
+                }
                 else
                     model.LastUpdate = data.ErrorDetails;
             }
-#if ENUMERATE_ON_REFRESH
-            _reader.StopDeviceWatcher();
-#endif
 
             ToggleButtons(true);
         }
@@ -311,6 +360,8 @@ namespace FloraSense
 
             var editDialog = new EditPlantDialog(item, plant);
             await editDialog.ShowAsync();
+
+            CheckValueRanges(item, plant);
         }
 
         private void SensorData_OnPointerEntered(object sender, PointerRoutedEventArgs e)

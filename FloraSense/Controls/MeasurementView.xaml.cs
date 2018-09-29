@@ -18,6 +18,12 @@ namespace FloraSense
             set => SetValue(IconProperty, value);
         }
 
+        public string Problems
+        {
+            get => (string)GetValue(ProblemsProperty);
+            set => SetValue(ProblemsProperty, value);
+        }
+
         public string Value
         {
             get => (string)GetValue(ValueProperty);
@@ -38,6 +44,8 @@ namespace FloraSense
 
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(string), typeof(MeasurementView), PropertyMetadata.Create("🐇"));
+        public static readonly DependencyProperty ProblemsProperty =
+            DependencyProperty.Register("Problems", typeof(string), typeof(MeasurementView), PropertyMetadata.Create(string.Empty));
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(string), typeof(MeasurementView), PropertyMetadata.Create("3000"));
         public static readonly DependencyProperty UnitProperty =

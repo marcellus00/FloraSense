@@ -20,6 +20,11 @@ namespace FloraSense
         public string Firmware { get; set; }
         public string LastUpdate { get; set; }
 
+        public string MoistureReport { get; set; }
+        public string FertilityReport { get; set; }
+        public string BrightnessReport { get; set; }
+        public string TemperatureReport { get; set; }
+
         #region ManuallyUpdated
 
         private string _name;
@@ -89,6 +94,14 @@ namespace FloraSense
 
             LastUpdate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             OnPropertyChanged(nameof(LastUpdate));
+        }
+
+        public void RefreshReports()
+        {
+            OnPropertyChanged(nameof(MoistureReport));
+            OnPropertyChanged(nameof(BrightnessReport));
+            OnPropertyChanged(nameof(FertilityReport));
+            OnPropertyChanged(nameof(TemperatureReport));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

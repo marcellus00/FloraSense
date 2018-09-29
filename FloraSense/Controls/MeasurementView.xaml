@@ -9,7 +9,7 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <TextBlock FontSize="{Binding ElementName=Measurement, Path=FontSize}" Foreground="{Binding ElementName=Measurement, Path=Foreground}">
-        <Run Text="{Binding ElementName=Measurement, Path=Icon}"/> <Run Text="{Binding ElementName=Measurement, Path=Value}"/><Run Text="{Binding ElementName=Measurement, Path=Unit}"/>
+    <TextBlock FontSize="{Binding ElementName=Measurement, Path=FontSize}" Foreground="{Binding ElementName=Measurement, Path=Foreground}" VerticalAlignment="Center">
+        <Run Text="{Binding ElementName=Measurement, Path=Icon}"/> <Run Text="{Binding ElementName=Measurement, Path=Value}"/><Run Text="{Binding ElementName=Measurement, Path=Unit}"/> <Run Text="{Binding ElementName=Measurement, Path=Problems}" Foreground="Red" FontWeight="Bold" FontSize="15" />
     </TextBlock>
 </UserControl>
