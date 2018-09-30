@@ -19,37 +19,38 @@
         <local:BoolToYes x:Key="BoolToYes"/>
         <local:UnitsToIdx x:Key="UnitsToIdx"/>
     </ContentDialog.Resources>
-    <StackPanel>
-        <ComboBox x:Uid="Lang" x:Name="LangBox" Header="Language" Margin="0,0,0,15">
-            <ComboBoxItem x:Uid="LangSys" Content="System default" Tag=""/>
-            <ComboBoxItem x:Uid="LangEn" Content="English" Tag="en"/>
-            <ComboBoxItem x:Uid="LangRu" Content="Russian" Tag="ru"/>
-        </ComboBox>
-        <ComboBox x:Uid="ComboPoll" Header="Poll sensors on start" Margin="0,0,0,15" 
+    <ScrollViewer>
+        <StackPanel>
+            <ComboBox x:Uid="Lang" x:Name="LangBox" Header="Language" Margin="0,0,0,15">
+                <ComboBoxItem x:Uid="LangSys" Content="System default" Tag=""/>
+                <ComboBoxItem x:Uid="LangEn" Content="English" Tag="en"/>
+                <ComboBoxItem x:Uid="LangRu" Content="Russian" Tag="ru"/>
+            </ComboBox>
+            <ComboBox x:Uid="ComboPoll" Header="Poll sensors on start" Margin="0,0,0,15" 
                   SelectedIndex="{Binding ElementName=Settings, Path=Backup.PollOnStart, Converter={StaticResource BoolToYes}, Mode=TwoWay}">
-            <TextBlock x:Uid="No" Text="No"/>
-            <TextBlock x:Uid="Yes" Text="Yes"/>
-        </ComboBox>
-        <ComboBox x:Uid="ComboUnits" Header="Temperature units" Margin="0,0,0,15"
+                <TextBlock x:Uid="No" Text="No"/>
+                <TextBlock x:Uid="Yes" Text="Yes"/>
+            </ComboBox>
+            <ComboBox x:Uid="ComboUnits" Header="Temperature units" Margin="0,0,0,15"
                   SelectedIndex="{Binding ElementName=Settings, Path=Backup.TempUnits, Converter={StaticResource UnitsToIdx}, Mode=TwoWay}">
-            <TextBlock Text="°C"/>
-            <TextBlock Text="°F"/>
-        </ComboBox>
-        <ComboBox x:Uid="Theme" Header="Theme" Margin="0,0,0,20" ItemsSource="{StaticResource ThemeCollection}" 
+                <TextBlock Text="°C"/>
+                <TextBlock Text="°F"/>
+            </ComboBox>
+            <ComboBox x:Uid="Theme" Header="Theme" Margin="0,0,0,20" ItemsSource="{StaticResource ThemeCollection}" 
                   SelectedValue="{Binding ElementName=Settings, Path=Backup.ThemeName, Mode=TwoWay, Converter={StaticResource StringToTheme}}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate x:DataType="local:Theme">
-                    <Grid Background="{Binding Brush}">
-                        <TextBlock Text="{Binding Name}" Foreground="{Binding TextColor}" FontWeight="Bold" />
-                    </Grid>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox/>
-        </ComboBox>
-        <StackPanel Name="InApps" Width="300">
-            <TextBlock x:Uid="Support" TextWrapping="WrapWholeWords" HorizontalAlignment="Stretch"
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="local:Theme">
+                        <Grid Background="{Binding Brush}">
+                            <TextBlock Text="{Binding Name}" Foreground="{Binding TextColor}" FontWeight="Bold" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Name="InApps" Width="300">
+                <TextBlock x:Uid="Support" TextWrapping="WrapWholeWords" HorizontalAlignment="Stretch"
                        Text="If you like this app you can support it's further development by buying the ad removal feature." />
-            <Button x:Uid="RemoveAds" Name="RemoveAds" Content="Remove ads" Click="RemoveAdsButton_Click" HorizontalAlignment="Stretch"/>
+                <Button x:Uid="RemoveAds" Name="RemoveAds" Content="Remove ads" Click="RemoveAdsButton_Click" HorizontalAlignment="Stretch"/>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

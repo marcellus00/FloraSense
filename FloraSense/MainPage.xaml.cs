@@ -24,10 +24,6 @@ namespace FloraSense
 {
     public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
-        public const string AppId = "9NP89FZM6N5F";
-        public const string AdIdRegular = "1100028866";
-        public const string AdIdNative = "1100029460";
-
         private const string TooHigh = " ▲";
         private const string TooLow = " ▼";
 
@@ -137,8 +133,11 @@ namespace FloraSense
             _hasSensors = KnownDevices.Any(model => model != _adModel);
             RefreshButton.IsEnabled = _hasSensors;
             WelcomeTip.Show(!_hasSensors);
-            if(updatePurchases)
+            if (updatePurchases)
+            {
+                _adItem?.Show(false);
                 await _storeController.UpdatePurchasesInfo();
+            }
             UpdateAdVisibility();
         }
 

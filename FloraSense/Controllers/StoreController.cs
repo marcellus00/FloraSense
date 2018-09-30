@@ -12,6 +12,7 @@ namespace FloraSense
         public bool FloraSenseAdFreePurchased => _userCollection?.ContainsKey(FloraSenseAdFree) ?? false;
 
         public StoreContext StoreContext { get; private set; }
+        public bool InitialCheck { get; private set; }
 
         private IReadOnlyDictionary<string, StoreProduct> _userCollection;
         private readonly List<string> _productKinds = new List<string> { "Durable" };
@@ -23,11 +24,7 @@ namespace FloraSense
 
             var queryResult = await StoreContext.GetUserCollectionAsync(_productKinds);
             _userCollection = queryResult.Products;
-
-            if (queryResult.ExtendedError != null)
-            {
-                return;
-            }
+            InitialCheck = true;
         }
     }
 }
