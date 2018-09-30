@@ -120,6 +120,9 @@
   <data name="AddSensors.Label" xml:space="preserve">
     <value>Добавить/удалить</value>
   </data>
+  <data name="Battery.Text" xml:space="preserve">
+    <value>Батарея</value>
+  </data>
   <data name="Brightness.Unit" xml:space="preserve">
     <value> lux</value>
   </data>
@@ -156,6 +159,21 @@
   <data name="FinishAdd.Label" xml:space="preserve">
     <value>Готово</value>
   </data>
+  <data name="Firmware.Text" xml:space="preserve">
+    <value>Версия ПО</value>
+  </data>
+  <data name="Lang.Header" xml:space="preserve">
+    <value>Язык интерфейса</value>
+  </data>
+  <data name="LangEn.Content" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangRu.Content" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="LangSys.Content" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
   <data name="Moisture.Unit" xml:space="preserve">
     <value>%</value>
   </data>
@@ -168,11 +186,26 @@
   <data name="PlantName.Header" xml:space="preserve">
     <value>Название растения</value>
   </data>
+  <data name="RecommendedBrightness.Text" xml:space="preserve">
+    <value>Рекомендованная яркость</value>
+  </data>
+  <data name="RecommendedFertility.Text" xml:space="preserve">
+    <value>Рекомендованная фертильность</value>
+  </data>
+  <data name="RecommendedMoisture.Text" xml:space="preserve">
+    <value>Рекомендованная влажность</value>
+  </data>
+  <data name="RecommendedTemperature.Text" xml:space="preserve">
+    <value>Рекомендованная температура</value>
+  </data>
   <data name="RefreshSensors.Label" xml:space="preserve">
     <value>Обновить</value>
   </data>
-  <data name="SensorMac.Header" xml:space="preserve">
-    <value>MAC-адрес датчика</value>
+  <data name="RemoveAds.Content" xml:space="preserve">
+    <value>Убрать рекламу</value>
+  </data>
+  <data name="SensorMac.Text" xml:space="preserve">
+    <value>MAC адрес</value>
   </data>
   <data name="Settings.Label" xml:space="preserve">
     <value>Настройки</value>
@@ -186,8 +219,14 @@
   <data name="SettingsWindow.Title" xml:space="preserve">
     <value>Настройки</value>
   </data>
+  <data name="Support.Text" xml:space="preserve">
+    <value>Если вам нравится это приложение, вы можете поддержать его дальнейшую разработку купив функцию отключения рекламы.</value>
+  </data>
   <data name="Temperature.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Температура</value>
+  </data>
+  <data name="Theme.Header" xml:space="preserve">
+    <value>Тема</value>
   </data>
   <data name="WelcomeTip1.Text" xml:space="preserve">
     <value>Используйте</value>

@@ -20,6 +20,11 @@
         <local:UnitsToIdx x:Key="UnitsToIdx"/>
     </ContentDialog.Resources>
     <StackPanel>
+        <ComboBox x:Uid="Lang" x:Name="LangBox" Header="Language" Margin="0,0,0,15">
+            <ComboBoxItem x:Uid="LangSys" Content="System default" Tag=""/>
+            <ComboBoxItem x:Uid="LangEn" Content="English" Tag="en"/>
+            <ComboBoxItem x:Uid="LangRu" Content="Russian" Tag="ru"/>
+        </ComboBox>
         <ComboBox x:Uid="ComboPoll" Header="Poll sensors on start" Margin="0,0,0,15" 
                   SelectedIndex="{Binding ElementName=Settings, Path=Backup.PollOnStart, Converter={StaticResource BoolToYes}, Mode=TwoWay}">
             <TextBlock x:Uid="No" Text="No"/>

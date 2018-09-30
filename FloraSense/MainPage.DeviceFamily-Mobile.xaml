@@ -123,7 +123,7 @@
             <AppBarButton Icon="Add" x:Uid="AddSensors" Label="Add sensors" x:Name="AddButton" Click="AddButton_OnClick"/>
             <AppBarButton Icon="Accept" x:Uid="FinishAdd" Label="Finish" x:Name="FinishButton" Click="FinishAddButton_OnClick" Visibility="Collapsed"/>
             <AppBarButton Icon="Refresh" x:Uid="RefreshSensors" Label="Refresh" x:Name="RefreshButton" Click="RefreshButton_Click"/>
-            <AppBarButton Icon="Setting" x:Uid="Settings" Label="Settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
+            <AppBarButton Icon="Setting" x:Uid="_settings" Label="_settings" x:Name="SettingsButton" Click="SettingsButton_OnClick" />
             <AppBarButton Icon="Setting" Label="Debug" Visibility="{Binding Debug, Converter={StaticResource BooleanToVisibility}}">
                 <AppBarButton.Flyout>
                     <MenuFlyout>

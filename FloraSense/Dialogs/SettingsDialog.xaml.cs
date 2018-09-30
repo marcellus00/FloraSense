@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Windows.ApplicationModel.Resources.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using FloraSense.Helpers;
@@ -10,27 +12,37 @@ namespace FloraSense
     public sealed partial class SettingsDialog : ContentDialog
     {
         private readonly SettingsModel _model;
-        private App App => (App)Application.Current;
         private readonly Action<string> _debugLog;
-        
-        public SettingsModel Backup { get; }
+        private readonly StoreController _storeController;
 
+        public SettingsModel Backup { get; }
         public Action OnRemoveAds;
 
-        public SettingsDialog(SettingsModel model, Action<string> debugLog = null)
+        public SettingsDialog(SettingsModel model, StoreController storeController, Action<string> debugLog = null)
         {
             InitializeComponent();
             _model = model;
+            _storeController = storeController;
             Backup = new SettingsModel();
             Backup.Update(_model);
+            LangBox.SelectedItem = LangBox.Items.FirstOrDefault(i => ((ComboBoxItem) i).Tag.ToString() == Backup.Language);
 
-            InApps.Show(!App.FloraSenseAdFreePurchased);
+            InApps.Show(!_storeController.FloraSenseAdFreePurchased);
             _debugLog = debugLog;
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            var oldLang = _model.Language;
+            Backup.Language = ((ComboBoxItem) LangBox.SelectedItem).Tag.ToString();
             _model.Update(Backup);
+
+            if (_model.Language != oldLang)
+            {
+                _model.RefreshLanguage();
+                ResourceContext.GetForViewIndependentUse().Reset();
+                ResourceContext.GetForCurrentView().Reset();
+            }
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -39,9 +51,9 @@ namespace FloraSense
 
         private async void RemoveAdsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (App.FloraSenseAdFreePurchased) return;
+            if (_storeController.FloraSenseAdFreePurchased) return;
             RemoveAds.IsEnabled = false;
-            var result = await App.StoreContext.RequestPurchaseAsync(App.FloraSenseAdFree);
+            var result = await _storeController.StoreContext.RequestPurchaseAsync(StoreController.FloraSenseAdFree);
 
             var extendedError = string.Empty;
             var message = string.Empty;
@@ -51,16 +63,15 @@ namespace FloraSense
 
             _debugLog?.Invoke($"[Purchase] {message} {extendedError}");
             
-            await App.UpdatePurchasesInfo();
+            await _storeController.UpdatePurchasesInfo();
 
-            var ads = !App.FloraSenseAdFreePurchased;
+            var ads = !_storeController.FloraSenseAdFreePurchased;
             RemoveAds.IsEnabled = ads;
             InApps.Show(ads);
-            if(App.FloraSenseAdFreePurchased)
+            if(_storeController.FloraSenseAdFreePurchased)
                 OnRemoveAds?.Invoke();
             OnRemoveAds = null;
         }
     }
-
 }
 

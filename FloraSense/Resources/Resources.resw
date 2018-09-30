@@ -118,31 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddSensors.Label" xml:space="preserve">
-    <value>Add/Remove</value>
+    <value>Добавить/удалить</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Батарея</value>
   </data>
   <data name="Brightness.Unit" xml:space="preserve">
     <value> lux</value>
   </data>
   <data name="Brightness.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Brightness</value>
+    <value>Яркость</value>
   </data>
   <data name="CelsiusUnit.Text" xml:space="preserve">
     <value>°C</value>
   </data>
   <data name="ComboPoll.Header" xml:space="preserve">
-    <value>Poll sensors on start</value>
+    <value>Обновлять на старте</value>
   </data>
   <data name="ComboUnits.Header" xml:space="preserve">
-    <value>Temperature units</value>
+    <value>Единица измерения</value>
   </data>
   <data name="EditDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="EditDialog.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </data>
   <data name="EditDialog.Title" xml:space="preserve">
-    <value>Edit plant details</value>
+    <value>Редактировать свойства растения</value>
   </data>
   <data name="FahrenheitUnit.Text" xml:space="preserve">
     <value>°F</value>
@@ -151,57 +154,90 @@
     <value> µS/cm</value>
   </data>
   <data name="Fertility.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Fertility</value>
+    <value>Фертильность</value>
   </data>
   <data name="FinishAdd.Label" xml:space="preserve">
-    <value>Finish</value>
+    <value>Готово</value>
+  </data>
+  <data name="Firmware" xml:space="preserve">
+    <value>Версия ПО</value>
+  </data>
+  <data name="Lang.Header" xml:space="preserve">
+    <value>Язык интерфейса</value>
+  </data>
+  <data name="LangEn.Content" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="LangRu.Content" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="LangSys.Content" xml:space="preserve">
+    <value>По умолчанию</value>
   </data>
   <data name="Moisture.Unit" xml:space="preserve">
     <value>%</value>
   </data>
   <data name="Moisture.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Moisture</value>
+    <value>Влажность</value>
   </data>
   <data name="No.Text" xml:space="preserve">
-    <value>No</value>
+    <value>Нет</value>
   </data>
   <data name="PlantName.Header" xml:space="preserve">
-    <value>Plant name</value>
+    <value>Название растения</value>
+  </data>
+  <data name="RecommendedBrightness.Text" xml:space="preserve">
+    <value>Рекомендованная яркость</value>
+  </data>
+  <data name="RecommendedFertility.Text" xml:space="preserve">
+    <value>Рекомендованная фертильность</value>
+  </data>
+  <data name="RecommendedMoisture.Text" xml:space="preserve">
+    <value>Рекомендованная влажность</value>
+  </data>
+  <data name="RecommendedTemperature.Text" xml:space="preserve">
+    <value>Рекомендованная температура</value>
   </data>
   <data name="RefreshSensors.Label" xml:space="preserve">
-    <value>Refresh</value>
+    <value>Обновить</value>
+  </data>
+  <data name="SensorMac" xml:space="preserve">
+    <value>MAC адрес</value>
   </data>
   <data name="SensorMac.Header" xml:space="preserve">
-    <value>Sensor MAC</value>
+    <value>MAC-адрес датчика</value>
   </data>
   <data name="Settings.Label" xml:space="preserve">
-    <value>Settings</value>
+    <value>Настройки</value>
   </data>
   <data name="SettingsWindow.PrimaryButtonText" xml:space="preserve">
-    <value>Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="SettingsWindow.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </data>
   <data name="SettingsWindow.Title" xml:space="preserve">
-    <value>Settings</value>
+    <value>Настройки</value>
   </data>
   <data name="Temperature.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Temperature</value>
+    <value>Температура</value>
+  </data>
+  <data name="Theme.Header" xml:space="preserve">
+    <value>Тема</value>
   </data>
   <data name="WelcomeTip1.Text" xml:space="preserve">
-    <value>Use</value>
+    <value>Используйте</value>
   </data>
   <data name="WelcomeTip2.Text" xml:space="preserve">
-    <value>to find your sensors</value>
+    <value>чтобы найти датчики</value>
   </data>
   <data name="WelcomeTip3.Text" xml:space="preserve">
-    <value>to remember them.</value>
+    <value>чтобы их запомнить.</value>
   </data>
   <data name="WelcomeTipAnd.Text" xml:space="preserve">
-    <value>and </value>
+    <value>и </value>
   </data>
   <data name="Yes.Text" xml:space="preserve">
-    <value>Yes</value>
+    <value>Да</value>
   </data>
 </root>

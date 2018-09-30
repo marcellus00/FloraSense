@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Services.Store;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -15,14 +12,9 @@ namespace FloraSense
     /// </summary>
     sealed partial class App : Application
     {
-        public const string FloraSenseAdFree = "9NGBX22P9BVH";
-        
-        public bool FloraSenseAdFreePurchased => _userCollection?.ContainsKey(FloraSenseAdFree) ?? false;
-
-        public StoreContext StoreContext { get; private set; }
-
-        private IReadOnlyDictionary<string, StoreProduct> _userCollection;
-        private readonly List<string> _productKinds = new List<string> {"Durable"};
+        private readonly SettingsModel _settings;
+        private readonly StoreController _storeController;
+        private readonly object[] _args;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -30,25 +22,15 @@ namespace FloraSense
         /// </summary>
         public App()
         {
+            _settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
+            _settings.RefreshLanguage();
+            _storeController = new StoreController();
+            _args = new object[] { _storeController, _settings };
+
             InitializeComponent();
             Suspending += OnSuspending;
         }
-
-        public async Task UpdatePurchasesInfo()
-        {
-            if (StoreContext == null)
-                StoreContext = StoreContext.GetDefault();
-            
-            var queryResult = await StoreContext.GetUserCollectionAsync(_productKinds);
-            _userCollection = queryResult.Products;
-
-            if (queryResult.ExtendedError != null)
-            {
-                return;
-            }
-        }
-
-
+        
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -56,11 +38,9 @@ namespace FloraSense
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (!(Window.Current.Content is Frame rootFrame))
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
@@ -83,7 +63,7 @@ namespace FloraSense
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(MainPage), _args);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

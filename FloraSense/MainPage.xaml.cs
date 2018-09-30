@@ -31,9 +31,10 @@ namespace FloraSense
         private const string TooHigh = " ▲";
         private const string TooLow = " ▼";
 
+        private object[] _args;
+        private StoreController _storeController;
+        private SettingsModel _settings;
         private readonly MiFloraReader _reader;
-        private readonly SettingsModel _settings;
-
         private readonly SensorDataModel _adModel;
 #if PLANT_LIST_BANNER
         private readonly DataTemplate _adTemplate;
@@ -43,7 +44,6 @@ namespace FloraSense
         
         private bool IsBusy => ProgressBar.Visibility == Visibility.Visible;
         private bool IsMobile => Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Mobile";
-        private App App { get; } = (App) Application.Current;
 
         public bool Debug { get; } =
 #if DEBUG
@@ -58,26 +58,20 @@ namespace FloraSense
         public Brush TextColor => Helpers.Helpers.GetTheme(ThemeName).TextColor;
         
         private bool _hasSensors;
+        private SettingsDialog _settingsDialog;
+        private EditPlantDialog _editPlantDialog;
 
         public MainPage()
         {
-            _settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
-
             Application.Current.Suspending += OnSuspend;
             Loaded += OnLoaded;
             InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Enabled;
             
             _reader = new MiFloraReader();
 
             var knownDevices = SaveData.Load<SensorDataCollection>();
             knownDevices?.RemoveInvalid();
             KnownDevices = knownDevices ?? new SensorDataCollection();
-
-            foreach (var knownDevice in knownDevices)
-            {
-                CheckValueRanges(knownDevice);
-            }
 
 #if PLANT_LIST_BANNER
             _adModel = new SensorDataModel {Known = true};
@@ -87,9 +81,20 @@ namespace FloraSense
             KnownDevices.Add(_adModel);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            _args = (object[]) e.Parameter;
+            _storeController = _args.OfType<StoreController>().FirstOrDefault();
+            _settings = _args.OfType<SettingsModel>().FirstOrDefault();
+
+            foreach (var knownDevice in KnownDevices)
+                CheckValueRanges(knownDevice);
+        }
+
         private void UpdateAdVisibility()
         {
-           _adItem?.Show(!App.FloraSenseAdFreePurchased && _hasSensors);
+           _adItem?.Show(!_storeController.FloraSenseAdFreePurchased && _hasSensors);
         }
 
         private void MainPage_OnKeyDown(object sender, KeyRoutedEventArgs e)
@@ -133,7 +138,7 @@ namespace FloraSense
             RefreshButton.IsEnabled = _hasSensors;
             WelcomeTip.Show(!_hasSensors);
             if(updatePurchases)
-                await App.UpdatePurchasesInfo();
+                await _storeController.UpdatePurchasesInfo();
             UpdateAdVisibility();
         }
 
@@ -161,7 +166,7 @@ namespace FloraSense
 
         private void CheckValueRanges(SensorDataModel knownDevice)
         {
-            var plant = _settings.Plants.FirstOrDefault(p => p.DeviceId == knownDevice.DeviceId);
+            var plant = _settings.Plants?.FirstOrDefault(p => p.DeviceId == knownDevice.DeviceId);
             CheckValueRanges(knownDevice, plant);
         }
 
@@ -214,6 +219,7 @@ namespace FloraSense
         private void ToggleButtons(bool value)
         {
             RefreshButton.IsEnabled = value && _hasSensors;
+            SettingsButton.IsEnabled = value;
             AddButton.IsEnabled = value;
             ProgressBar.Show(!value);
         }
@@ -317,22 +323,31 @@ namespace FloraSense
 
         private async void SettingsButton_OnClick(object sender, RoutedEventArgs e)
         {
+            if(_settingsDialog != null)
+                return;
+
             _settings.BgUpdate = BgTaskHelper.TaskRegistered;
-            var settingsDialog = new SettingsDialog(_settings, LogDebug);
-            settingsDialog.OnRemoveAds += UpdateAdVisibility;
-            var result = await settingsDialog.ShowAsync();
+            _settingsDialog = new SettingsDialog(_settings, _storeController, LogDebug);
+            _settingsDialog.OnRemoveAds += UpdateAdVisibility;
+            var oldLang = _settings.Language;
+            var result = await _settingsDialog.ShowAsync();
+            _settingsDialog = null;
             UpdateAdVisibility();
-            
+
             if (result != ContentDialogResult.Primary) return;
             SaveData.Save(_settings);
             OnPropertyChanged(nameof(IsCelsius));
             OnPropertyChanged(nameof(ThemeName));
             OnPropertyChanged(nameof(TextColor));
-            CheckList();
 
             BgTaskHelper.UnregisterTask();
-            if (!_settings.BgUpdate) return;
-            _settings.BgUpdate = await BgTaskHelper.RegisterTask(_settings.BgUpdateRate);
+            if (_settings.BgUpdate)
+                _settings.BgUpdate = await BgTaskHelper.RegisterTask(_settings.BgUpdateRate);
+
+            if (_settings.Language != oldLang)
+                Frame.Navigate(typeof(MainPage), _args);
+            else
+                CheckList();
         }
 
         private void LogDebug(string log)
@@ -342,9 +357,14 @@ namespace FloraSense
 
         private async void PlantsList_OnItemClick(object sender, ItemClickEventArgs e)
         {
-            if (IsBusy) return;
-            var item = e.ClickedItem as SensorDataModel;
-            if (item == _adModel) return;
+            if (IsBusy ||
+                    _editPlantDialog != null ||
+                        !(e.ClickedItem is SensorDataModel item) ||
+                            item == _adModel)
+            {
+                return;
+            }
+
             if (!item.IsValid)
             {
                 KnownDevices.Remove(item);
@@ -358,15 +378,17 @@ namespace FloraSense
                 _settings.Plants?.Add(plant);
             }
 
-            var editDialog = new EditPlantDialog(item, plant);
-            await editDialog.ShowAsync();
-
+            _editPlantDialog = new EditPlantDialog(item, plant);
+            await _editPlantDialog.ShowAsync();
+            _editPlantDialog = null;
             CheckValueRanges(item, plant);
         }
 
         private void SensorData_OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            if (IsBusy) return;
+            if (IsBusy)
+                return;
+
             (sender as FrameworkElement).FindDescendantByName("EditIcon").Show(true);
         }
 
@@ -385,7 +407,8 @@ namespace FloraSense
 
         private void SensorData_OnLoading(FrameworkElement sender, object args)
         {
-            if (!IsMobile) return;
+            if (!IsMobile)
+                return;
             // ReSharper disable once PossibleNullReferenceException
             (sender as RelativePanel).Width = Window.Current.Bounds.Width * 0.95f;
         }

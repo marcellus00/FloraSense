@@ -1,11 +1,13 @@
 ﻿using FloraSense.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Globalization;
 
 namespace FloraSense
 {
     public class SettingsModel
     {
+        public string Language { get; set; } = string.Empty;
         public bool PollOnStart { get; set; }
         public Units TempUnits { get; set; }
         public string ThemeName { get; set; }
@@ -21,6 +23,13 @@ namespace FloraSense
             ThemeName = model.ThemeName ?? Helpers.Helpers.Themes.First().Name;
             BgUpdate = model.BgUpdate;
             BgUpdateRate = model.BgUpdateRate;
+            Language = model.Language;
+        }
+        
+        public void RefreshLanguage()
+        {
+            if(Language != null)
+                ApplicationLanguages.PrimaryLanguageOverride = Language;
         }
 
         public enum Units
