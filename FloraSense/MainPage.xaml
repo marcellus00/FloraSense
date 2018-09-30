@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignWidth="480"
     d:DesignHeight="500"
-    Background="{ThemeResource SystemControlAcrylicElementBrush}"
+    Background="{ThemeResource SystemControlAcrylicWindowBrush}"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     KeyDown="MainPage_OnKeyDown">
 
