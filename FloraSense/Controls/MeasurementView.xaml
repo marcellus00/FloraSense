@@ -7,9 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    LayoutUpdated="MeasurementView_OnLayoutUpdated">
 
-    <TextBlock FontSize="{Binding ElementName=Measurement, Path=FontSize}" Foreground="{Binding ElementName=Measurement, Path=Foreground}" VerticalAlignment="Center">
-        <Run Text="{Binding ElementName=Measurement, Path=Icon}"/> <Run Text="{Binding ElementName=Measurement, Path=Value}"/><Run Text="{Binding ElementName=Measurement, Path=Unit}"/> <Run Text="{Binding ElementName=Measurement, Path=Problems}" Foreground="Red" FontWeight="Bold" FontSize="15" />
+    <TextBlock FontSize="{Binding ElementName=Measurement, Path=FontSize}" VerticalAlignment="Center">
+        <Run Text="{Binding ElementName=Measurement, Path=Icon}"/> <Run Text="{Binding ElementName=Measurement, Path=Value}"/><Run Text="{Binding ElementName=Measurement, Path=Unit}"/> <Run Text="{Binding ElementName=Measurement, Path=Problems}" FontWeight="Bold" FontSize="15"  />
     </TextBlock>
 </UserControl>

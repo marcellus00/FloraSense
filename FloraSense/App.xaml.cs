@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using MiFlora;
 
 namespace FloraSense
 {
@@ -12,8 +13,6 @@ namespace FloraSense
     /// </summary>
     sealed partial class App : Application
     {
-        private readonly SettingsModel _settings;
-        private readonly StoreController _storeController;
         private readonly object[] _args;
 
         /// <summary>
@@ -22,10 +21,11 @@ namespace FloraSense
         /// </summary>
         public App()
         {
-            _settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
-            _settings.RefreshLanguage();
-            _storeController = new StoreController();
-            _args = new object[] { _storeController, _settings };
+            var settings = SaveData.Load<SettingsModel>() ?? new SettingsModel();
+            settings.RefreshLanguage();
+            var storeController = new StoreController();
+            var reader = new MiFloraReader();
+            _args = new object[] { storeController, settings, reader };
 
             InitializeComponent();
             Suspending += OnSuspending;

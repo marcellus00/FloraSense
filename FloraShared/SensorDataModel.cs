@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Windows.UI.Xaml.Media;
 using FloraShared.Annotations;
 using MiFlora;
 

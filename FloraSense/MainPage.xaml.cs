@@ -1,5 +1,6 @@
 ﻿#define PLANT_LIST_BANNER
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -30,7 +31,10 @@ namespace FloraSense
         private object[] _args;
         private StoreController _storeController;
         private SettingsModel _settings;
-        private readonly MiFloraReader _reader;
+        private MiFloraReader _reader;
+
+        private List<string> _refreshQueue;
+
         private readonly SensorDataModel _adModel;
 #if PLANT_LIST_BANNER
         private readonly DataTemplate _adTemplate;
@@ -62,8 +66,6 @@ namespace FloraSense
             Application.Current.Suspending += OnSuspend;
             Loaded += OnLoaded;
             InitializeComponent();
-            
-            _reader = new MiFloraReader();
 
             var knownDevices = SaveData.Load<SensorDataCollection>();
             knownDevices?.RemoveInvalid();
@@ -81,8 +83,9 @@ namespace FloraSense
         {
             base.OnNavigatedTo(e);
             _args = (object[]) e.Parameter;
-            _storeController = _args.OfType<StoreController>().FirstOrDefault();
-            _settings = _args.OfType<SettingsModel>().FirstOrDefault();
+            _storeController = _args.OfType<StoreController>().First();
+            _settings = _args.OfType<SettingsModel>().First();
+            _reader = _args.OfType<MiFloraReader>().First();
 
             foreach (var knownDevice in KnownDevices)
                 CheckValueRanges(knownDevice);
@@ -163,6 +166,44 @@ namespace FloraSense
             });
         }
 
+        private async void OnSensorDataRefreshed(SensorData sensorData)
+        {
+            await RunAsync(() =>
+            {
+                var id = sensorData.DeviceId;
+                if (!_refreshQueue.Contains(id))
+                    return;
+
+                _refreshQueue.Remove(id);
+
+                var model = KnownDevices.First(data => data.DeviceId == id);
+                model.Update(sensorData);
+                CheckValueRanges(model);
+
+                if (!_refreshQueue.Any())
+                {
+                    _reader.OnSensorDataRecieved = null;
+                    _reader.StopDeviceWatcher();
+                    ToggleButtons(true);
+                }
+            });
+        }
+
+        private void EnumerateDevices()
+        {
+            _reader.OnSensorDataRecieved = OnSensorDataReceived;
+            _reader.OnEnumerationCompleted = OnEnumerationCompleted;
+            _reader.StartDeviceWatcher();
+        }
+
+        private void RefreshDevices()
+        {
+            _refreshQueue = KnownDevices.Where(model => model.IsValid).Select(model => model.DeviceId).ToList();
+
+            _reader.OnSensorDataRecieved += OnSensorDataRefreshed;
+            _reader.StartDeviceWatcher();
+        }
+
         private void CheckValueRanges(SensorDataModel knownDevice)
         {
             var plant = _settings.Plants?.FirstOrDefault(p => p.DeviceId == knownDevice.DeviceId);
@@ -228,21 +269,7 @@ namespace FloraSense
             if (!await CheckBluetooth())
                 return;
             
-            foreach (var model in KnownDevices.ToList())
-            {
-                if (!model.IsValid) continue;
-                var data = await MiFloraReader.PollDevice(model.DeviceId);
-
-                if (data.Error == SensorData.ErrorType.None)
-                {
-                    model.Update(data);
-                    CheckValueRanges(model);
-                }
-                else
-                    model.LastUpdate = data.ErrorDetails;
-            }
-
-            ToggleButtons(true);
+            RefreshDevices();
         }
 
         private async Task<bool> CheckBluetooth()
@@ -300,13 +327,6 @@ namespace FloraSense
 
             SaveData.Save(KnownDevices);
             CheckList();
-        }
-
-        private void EnumerateDevices()
-        {
-            _reader.OnSensorDataRecieved += OnSensorDataReceived;
-            _reader.OnEnumerationCompleted += OnEnumerationCompleted;
-            _reader.StartDeviceWatcher();
         }
 
         private async void OnEnumerationCompleted()

@@ -1,5 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -9,7 +11,7 @@ namespace FloraSense
     {
         public MeasurementView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public string Icon
@@ -41,6 +43,18 @@ namespace FloraSense
             get => (ValueStatus)GetValue(StatusProperty);
             set => SetValue(StatusProperty, value);
         }
+        
+        public Brush ForegroundNormal
+        {
+            get => (Brush)GetValue(ForegroundNormalProperty);
+            set => SetValue(ForegroundNormalProperty, value);
+        }
+
+        public Brush ForegroundWarning
+        {
+            get => (Brush)GetValue(ForegroundWarningProperty);
+            set => SetValue(ForegroundWarningProperty, value);
+        }
 
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(string), typeof(MeasurementView), PropertyMetadata.Create("🐇"));
@@ -52,12 +66,21 @@ namespace FloraSense
             DependencyProperty.Register("Unit", typeof(string), typeof(MeasurementView), PropertyMetadata.Create(" µS/cm"));
         public static readonly DependencyProperty StatusProperty =
             DependencyProperty.Register("Status", typeof(ValueStatus), typeof(MeasurementView), PropertyMetadata.Create(default(ValueStatus)));
+        public static readonly DependencyProperty ForegroundNormalProperty =
+            DependencyProperty.Register("ForegroundNormal", typeof(Brush), typeof(MeasurementView), PropertyMetadata.Create(new SolidColorBrush(Colors.White)));
+        public static readonly DependencyProperty ForegroundWarningProperty =
+            DependencyProperty.Register("ForegroundWarning", typeof(Brush), typeof(MeasurementView), PropertyMetadata.Create(new SolidColorBrush(Colors.Red)));
 
         public enum ValueStatus
         {
             Normal,
             TooLow,
             TooHigh
+        }
+
+        private void MeasurementView_OnLayoutUpdated(object sender, object e)
+        {
+            Foreground = string.IsNullOrEmpty(Problems) ? ForegroundNormal : ForegroundWarning;
         }
     }
 }

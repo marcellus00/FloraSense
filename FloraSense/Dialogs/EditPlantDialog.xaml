@@ -34,12 +34,12 @@
                                 RangeMax="{x:Bind PlantModel.MoistureRange.Max}"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedFertility" Text="Recommended fertility" />
-        <controls:RangeSelector Name="F" Minimum="0" Maximum="9000" StepFrequency="5" 
+        <controls:RangeSelector Name="F" Minimum="0" Maximum="9000" StepFrequency="50" 
                                 RangeMin="{x:Bind PlantModel.FertilityRange.Min}"
                                 RangeMax="{x:Bind PlantModel.FertilityRange.Max}"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedBrightness" Text="Recommended brightness" />
-        <controls:RangeSelector Name="B" Minimum="0" Maximum="60000" StepFrequency="10" 
+        <controls:RangeSelector Name="B" Minimum="0" Maximum="60000" StepFrequency="50" 
                                 RangeMin="{x:Bind PlantModel.BrightnessRange.Min}"
                                 RangeMax="{x:Bind PlantModel.BrightnessRange.Max}"/>
         <fc:EmptySpace />
