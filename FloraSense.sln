@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloraSense", "FloraSense\FloraSense.csproj", "{14659B05-3EF0-4DB5-A648-7A51B2D74A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFloraReader", "..\MiFloraReader\MiFloraReader\MiFloraReader.csproj", "{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFloraReader", "MiFloraReader\MiFloraReader.csproj", "{0E196CF1-99BD-4AB8-9A53-F783DD2EE1FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloraBackground", "FloraBackground\FloraBackground.csproj", "{41D1F75A-164D-4523-A576-D00560AA9853}"
 EndProject
