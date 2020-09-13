@@ -24,10 +24,10 @@ namespace FloraSense
         {
             Model.Name = PlantName.Text;
             PlantModel.Name = Model.Name;
-            PlantModel.MoistureRange = new MinMaxInt((int) M.RangeMin, (int) M.RangeMax);
-            PlantModel.FertilityRange = new MinMaxInt((int) F.RangeMin, (int) F.RangeMax);
-            PlantModel.BrightnessRange = new MinMaxInt((int) B.RangeMin, (int) B.RangeMax);
-            PlantModel.TemperatureRange = new MinMaxFloat((float) T.RangeMin, (float) T.RangeMax);
+            PlantModel.MoistureRange = new MinMaxInt((int) Moisture.RangeMin, (int) Moisture.RangeMax);
+            PlantModel.FertilityRange = new MinMaxInt((int) Fertility.RangeMin, (int) Fertility.RangeMax);
+            PlantModel.BrightnessRange = new MinMaxInt((int) Brightness.RangeMin, (int) Brightness.RangeMax);
+            PlantModel.TemperatureRange = new MinMaxFloat((float) Temperature.RangeMin, (float) Temperature.RangeMax);
         }
 
         private void ContentDialog_CancelButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

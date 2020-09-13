@@ -29,22 +29,22 @@
         <TextBox x:Uid="PlantName" x:Name="PlantName" Header="Plant name" Text="{x:Bind Model.Name, Mode=OneTime}" MaxLength="30" TextChanged="TextBox_OnTextChanged"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedMoisture" Text="Recommended moisture" />
-        <controls:RangeSelector Name="M" Minimum="0" Maximum="100" StepFrequency="1" 
+        <controls:RangeSelector Name="Moisture" Minimum="0" Maximum="100" StepFrequency="1" 
                                 RangeMin="{x:Bind PlantModel.MoistureRange.Min}"
                                 RangeMax="{x:Bind PlantModel.MoistureRange.Max}"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedFertility" Text="Recommended fertility" />
-        <controls:RangeSelector Name="F" Minimum="0" Maximum="9000" StepFrequency="50" 
+        <controls:RangeSelector Name="Fertility" Minimum="0" Maximum="9000" StepFrequency="50" 
                                 RangeMin="{x:Bind PlantModel.FertilityRange.Min}"
                                 RangeMax="{x:Bind PlantModel.FertilityRange.Max}"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedBrightness" Text="Recommended brightness" />
-        <controls:RangeSelector Name="B" Minimum="0" Maximum="60000" StepFrequency="50" 
+        <controls:RangeSelector Name="Brightness" Minimum="0" Maximum="60000" StepFrequency="50" 
                                 RangeMin="{x:Bind PlantModel.BrightnessRange.Min}"
                                 RangeMax="{x:Bind PlantModel.BrightnessRange.Max}"/>
         <fc:EmptySpace />
         <TextBlock x:Uid="RecommendedTemperature" Text="Recommended temperature" />
-        <controls:RangeSelector Name="T" Minimum="0" Maximum="100" StepFrequency="1" 
+        <controls:RangeSelector Name="Temperature" Minimum="0" Maximum="100" StepFrequency="1" 
                                 RangeMin="{x:Bind PlantModel.TemperatureRange.Min}"
                                 RangeMax="{x:Bind PlantModel.TemperatureRange.Max}"/>
         <fc:EmptySpace Height="20"/>
